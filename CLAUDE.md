@@ -24,10 +24,13 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
 ## Architecture (target, see PLAN.md §4)
 
 - Next.js 16 App Router, React 19, TypeScript strict + `noUncheckedIndexedAccess`.
-- Server Components by default. Pages are statically generated.
+- Server Components by default. Every page is statically generated (SSG via
+  `generateStaticParams`; `dynamicParams = false` makes unknown slugs a real 404).
+  `cacheComponents` is deliberately off: the site has no request-time data, and
+  with it unknown slugs became soft 404s (status 200).
 - i18n with next-intl: German default without prefix (`/`), English under `/en`
   (`localePrefix: "as-needed"`). The locale comes from `next/root-params` in
-  `i18n/request.ts` (keeps pages static under `cacheComponents`). No locale cookie
+  `i18n/request.ts` (no `headers()`, so every page stays static). No locale cookie
   and no Accept-Language detection: the URL alone decides the language.
 - Content: `content/schema.ts` (zod) → data files → `content/index.ts`, which validates
   at module load and returns localized objects (`getProjects(locale)`, …) via
