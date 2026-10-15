@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, JetBrains_Mono } from "next/font/google";
+import { Archivo } from "next/font/google";
 import { notFound } from "next/navigation";
 import { locale as rootLocale } from "next/root-params";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -15,11 +15,6 @@ const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
   axes: ["wdth"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
 });
 
 // Marks that JavaScript runs, before first paint, so <Reveal> may hide content
@@ -47,7 +42,7 @@ export default async function LocaleLayout({
     // next-themes and the JS marker change <html> classes before hydration.
     <html
       lang={locale}
-      className={`${archivo.variable} ${jetbrainsMono.variable} antialiased`}
+      className={`${archivo.variable} antialiased`}
       suppressHydrationWarning
     >
       <head>

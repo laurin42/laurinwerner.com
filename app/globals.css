@@ -32,7 +32,6 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --font-sans: var(--font-archivo);
-  --font-mono: var(--font-jetbrains-mono);
 }
 
 /* Narrow, heavy, uppercase: names, titles and section headings. */
@@ -45,13 +44,14 @@
   letter-spacing: -0.01em;
 }
 
-/* Small monospace labels: key facts, dates, meta information. */
+/* Small spaced-out labels: key facts, dates, meta information. */
 @utility type-label {
-  font-family: var(--font-jetbrains-mono);
+  font-family: var(--font-archivo);
   font-size: 0.75rem;
+  font-weight: 600;
   line-height: 1.5;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 @layer base {
@@ -112,8 +112,8 @@
 /*
  * <NameMorph> (components/motion/NameMorph.tsx) morphs the hero name into the
  * header name on scroll. On the homepage the header name starts hidden, but only
- * when JavaScript runs; while the words travel they sit above the sticky header,
- * unless the mobile menu is open.
+ * when JavaScript runs. While the hero words fly back from the header they sit
+ * above it, unless the mobile menu is open.
  */
 .js body:has(#hero-name) [data-header-name] {
   visibility: hidden;
