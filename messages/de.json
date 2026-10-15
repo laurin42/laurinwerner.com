@@ -1,0 +1,25 @@
+{
+  "layout": {
+    "skipToContent": "Zum Inhalt springen"
+  },
+  "nav": {
+    "label": "Hauptnavigation",
+    "projects": "Projekte",
+    "about": "Über mich",
+    "experience": "Werdegang",
+    "contact": "Kontakt",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "toggleTheme": "Farbschema wechseln"
+  },
+  "footer": {
+    "legalNav": "Rechtliches",
+    "imprint": "Impressum",
+    "privacy": "Datenschutz"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Diese Seite gibt es nicht oder nicht mehr.",
+    "backHome": "Zur Startseite"
+  }
+}

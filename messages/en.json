@@ -1,0 +1,25 @@
+{
+  "layout": {
+    "skipToContent": "Skip to content"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "projects": "Projects",
+    "about": "About",
+    "experience": "Experience",
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "toggleTheme": "Toggle color scheme"
+  },
+  "footer": {
+    "legalNav": "Legal",
+    "imprint": "Legal notice",
+    "privacy": "Privacy policy"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "This page does not exist or no longer exists.",
+    "backHome": "Back to the homepage"
+  }
+}
