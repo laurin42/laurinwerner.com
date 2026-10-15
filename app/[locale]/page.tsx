@@ -9,12 +9,12 @@ export default async function HomePage() {
   const locale = await getLocale();
 
   return (
-    <div className="mx-auto max-w-5xl px-6">
+    <>
       <Hero locale={locale} />
       <Projects locale={locale} />
       <About locale={locale} />
       <Experience locale={locale} />
       <Contact locale={locale} />
-    </div>
+    </>
   );
 }

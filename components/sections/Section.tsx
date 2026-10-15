@@ -1,24 +1,33 @@
 import type { ReactNode } from "react";
+import { Reveal } from "@/components/motion/Reveal";
+import { container } from "@/lib/ui";
 
 type SectionProps = {
   id: string;
   title: string;
+  /** Short label on the right of the heading rule, e.g. a count. */
+  meta?: string;
   children: ReactNode;
 };
 
-/** A homepage section with a labelled landmark and an `<h2>`. */
-export function Section({ id, title, children }: SectionProps) {
+/** A homepage section: full-width rule, `<h2>`, then content. */
+export function Section({ id, title, meta, children }: SectionProps) {
   const headingId = `${id}-heading`;
   return (
     <section
       id={id}
       aria-labelledby={headingId}
-      className="border-t border-border py-16"
+      className={`${container} py-20 sm:py-28`}
     >
-      <h2 id={headingId} className="text-2xl font-semibold tracking-tight">
-        {title}
-      </h2>
-      <div className="mt-8">{children}</div>
+      <Reveal>
+        <div className="flex items-baseline justify-between gap-4 border-t border-foreground pt-4">
+          <h2 id={headingId} className="type-display text-5xl sm:text-6xl">
+            {title}
+          </h2>
+          {meta && <p className="type-label text-muted-foreground">{meta}</p>}
+        </div>
+      </Reveal>
+      <div className="mt-12 sm:mt-16">{children}</div>
     </section>
   );
 }

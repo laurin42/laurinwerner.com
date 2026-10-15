@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { container } from "@/lib/ui";
 import { useEffect, useId, useRef, useState } from "react";
 import { CloseIcon, MenuIcon } from "./icons";
 
@@ -74,7 +75,7 @@ export function MobileMenu({
         aria-label={label}
         title={label}
         onClick={() => setOpen((value) => !value)}
-        className="inline-flex size-10 items-center justify-center rounded-md hover:bg-muted"
+        className="inline-flex size-10 items-center justify-center hover:bg-muted"
       >
         {open ? <CloseIcon /> : <MenuIcon />}
       </button>
@@ -82,16 +83,16 @@ export function MobileMenu({
         ref={panelRef}
         id={panelId}
         hidden={!open}
-        className="absolute inset-x-0 top-full border-b border-border bg-background"
+        className="absolute inset-x-0 top-full border-b border-foreground bg-background"
       >
         <nav aria-label={navLabel}>
-          <ul className="mx-auto flex max-w-5xl flex-col px-6 py-4">
+          <ul className={`${container} flex flex-col py-4`}>
             {items.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="block rounded-md px-2 py-3 hover:bg-muted"
+                  className="block py-3 type-display text-4xl hover:underline hover:decoration-2 hover:underline-offset-4"
                 >
                   {item.label}
                 </Link>

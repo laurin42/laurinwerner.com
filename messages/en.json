@@ -33,7 +33,8 @@
     "cvMissing": "TODO(laurin): CV as PDF",
     "present": "present",
     "contactEmail": "Email",
-    "techStack": "Technologies"
+    "techStack": "Technologies",
+    "projectCount": "{count, plural, one {# project} other {# projects}}"
   },
   "caseStudy": {
     "facts": "Key facts",

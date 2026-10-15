@@ -3,20 +3,23 @@
 /* Dark mode follows the class next-themes sets on <html>. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Neutral placeholder tokens; the real palette is chosen in Phase 4. */
+/*
+ * Black and white only. Grey is reserved for secondary information and stays
+ * at WCAG AA contrast (≥ 4.5:1) against the background in both themes.
+ */
 :root {
   --background: oklch(1 0 0);
-  --foreground: oklch(0.2 0 0);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.45 0 0);
+  --foreground: oklch(0.145 0 0);
+  --muted: oklch(0.965 0 0);
+  --muted-foreground: oklch(0.47 0 0);
   --border: oklch(0.9 0 0);
   color-scheme: light;
 }
 
 .dark {
-  --background: oklch(0.16 0 0);
-  --foreground: oklch(0.96 0 0);
-  --muted: oklch(0.24 0 0);
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.97 0 0);
+  --muted: oklch(0.21 0 0);
   --muted-foreground: oklch(0.72 0 0);
   --border: oklch(0.3 0 0);
   color-scheme: dark;
@@ -28,15 +31,103 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-archivo);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
-html {
-  /* Keeps anchor targets clear of the sticky header. */
-  scroll-padding-top: 5rem;
+/* Narrow, heavy, uppercase: names, titles and section headings. */
+@utility type-display {
+  font-family: var(--font-archivo);
+  font-weight: 800;
+  font-stretch: 62%;
+  text-transform: uppercase;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+/* Small monospace labels: key facts, dates, meta information. */
+@utility type-label {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+@layer base {
+  html {
+    /* Keeps anchor targets clear of the sticky header. */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--foreground);
+    outline-offset: 3px;
+  }
+}
+
+/*
+ * <Reveal> (components/motion/Reveal.tsx): content is hidden only when JavaScript
+ * runs (`.js`, set by an inline script before first paint) and motion is allowed.
+ * Once the component mounts it marks itself `data-reveal-ready` and GSAP takes
+ * over. If that never happens, the fallback animation shows the content anyway.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal]:not([data-reveal-ready]) {
+    animation: reveal-fallback 0s 2.5s forwards;
+  }
+
+  .js [data-reveal="rise"]:not([data-reveal-ready]) {
+    opacity: 0;
+  }
+
+  .js [data-reveal="clip"]:not([data-reveal-ready]) {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+/* Hero entrance: pure CSS, runs from the first paint, never depends on JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-in {
+    animation: hero-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--delay, 0s)
+      both;
+  }
+
+  .hero-clip {
+    animation: hero-uncover 1.2s cubic-bezier(0.7, 0, 0.2, 1) 0.15s both;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@keyframes hero-uncover {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes reveal-fallback {
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
 }

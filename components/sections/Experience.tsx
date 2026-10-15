@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { Reveal } from "@/components/motion/Reveal";
 import { StackTags } from "@/components/project/StackTags";
 import { getExperience } from "@/content";
 import type { Locale } from "@/i18n/routing";
@@ -12,33 +13,36 @@ export async function Experience({ locale }: { locale: Locale }) {
 
   return (
     <Section id={sectionId("experience", locale)} title={t("nav.experience")}>
-      <ol className="border-l border-border">
+      <ol className="flex flex-col">
         {entries.map((entry) => (
-          <li key={entry.start} className="relative pb-10 pl-6 last:pb-0">
-            <span
-              aria-hidden="true"
-              className="absolute top-2 -left-1.5 size-3 rounded-full border border-border bg-background"
-            />
-            <p className="text-sm text-muted-foreground">
-              <time dateTime={entry.start}>
-                {formatPeriod(
-                  entry.start,
-                  entry.end,
-                  locale,
-                  t("home.present"),
+          <li
+            key={entry.start}
+            className="border-t border-border py-8 first:border-t-0 first:pt-0"
+          >
+            <Reveal className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
+              <p className="type-label text-muted-foreground">
+                <time dateTime={entry.start}>
+                  {formatPeriod(
+                    entry.start,
+                    entry.end,
+                    locale,
+                    t("home.present"),
+                  )}
+                </time>
+              </p>
+              <div className="flex flex-col gap-3">
+                <h3 className="text-2xl font-bold">{entry.title}</h3>
+                <p className="text-muted-foreground">
+                  {[entry.organization, entry.location]
+                    .filter(Boolean)
+                    .join(", ")}
+                </p>
+                <p className="max-w-[60ch]">{entry.description}</p>
+                {entry.tags.length > 0 && (
+                  <StackTags items={entry.tags} label={t("home.techStack")} />
                 )}
-              </time>
-            </p>
-            <h3 className="mt-1 text-lg font-semibold">{entry.title}</h3>
-            <p className="text-muted-foreground">
-              {[entry.organization, entry.location].filter(Boolean).join(", ")}
-            </p>
-            <p className="mt-2 max-w-2xl">{entry.description}</p>
-            {entry.tags.length > 0 && (
-              <div className="mt-3">
-                <StackTags items={entry.tags} label={t("home.techStack")} />
               </div>
-            )}
+            </Reveal>
           </li>
         ))}
       </ol>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Archivo, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { locale as rootLocale } from "next/root-params";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -11,10 +11,20 @@ import { routing } from "@/i18n/routing";
 import { siteConfig } from "@/lib/site-config";
 import "../globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  axes: ["wdth"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
+
+// Marks that JavaScript runs, before first paint, so <Reveal> may hide content
+// it is about to animate in. Without JavaScript nothing is ever hidden.
+const jsMarker = `document.documentElement.classList.add("js")`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -34,12 +44,15 @@ export default async function LocaleLayout({
   const t = await getTranslations("layout");
 
   return (
-    // next-themes sets the theme class on <html> before hydration.
+    // next-themes and the JS marker change <html> classes before hydration.
     <html
       lang={locale}
-      className={`${geistSans.variable} antialiased`}
+      className={`${archivo.variable} ${jetbrainsMono.variable} antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: jsMarker }} />
+      </head>
       <body className="flex min-h-dvh flex-col font-sans">
         <ThemeProvider
           attribute="class"
@@ -51,7 +64,7 @@ export default async function LocaleLayout({
           <NextIntlClientProvider messages={null}>
             <a
               href="#main"
-              className="sr-only z-50 rounded-md bg-foreground px-4 py-2 text-background focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+              className="sr-only z-50 bg-foreground px-4 py-2 text-background focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
             >
               {t("skipToContent")}
             </a>

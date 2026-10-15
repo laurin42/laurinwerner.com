@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { ProjectCard } from "@/components/project/ProjectCard";
+import { ProjectEntry } from "@/components/project/ProjectEntry";
 import { getFeaturedProjects } from "@/content";
 import type { Locale } from "@/i18n/routing";
 import { sectionId } from "@/lib/sections";
@@ -10,15 +10,18 @@ export async function Projects({ locale }: { locale: Locale }) {
   const projects = getFeaturedProjects(locale);
 
   return (
-    <Section id={sectionId("projects", locale)} title={t("nav.projects")}>
-      <ul className="grid gap-6 md:grid-cols-2">
+    <Section
+      id={sectionId("projects", locale)}
+      title={t("nav.projects")}
+      meta={t("home.projectCount", { count: projects.length })}
+    >
+      <ul className="flex flex-col gap-24 sm:gap-36">
         {projects.map((project, index) => (
-          <li key={project.slug} className="flex">
-            {/* The first row of cards is usually in view on load. */}
-            <ProjectCard
+          <li key={project.slug}>
+            <ProjectEntry
               project={project}
               stackLabel={t("home.techStack")}
-              eager={index < 2}
+              eager={index === 0}
             />
           </li>
         ))}

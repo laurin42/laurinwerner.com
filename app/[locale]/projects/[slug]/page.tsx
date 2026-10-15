@@ -1,12 +1,14 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { Reveal } from "@/components/motion/Reveal";
 import { CaseStudySection } from "@/components/project/CaseStudySection";
 import { StackTags } from "@/components/project/StackTags";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { getNextProject, getProject, getProjectSlugs } from "@/content";
 import { Link } from "@/i18n/navigation";
 import { sectionId } from "@/lib/sections";
+import { container, textLink } from "@/lib/ui";
 
 // Only the known projects exist; any other slug is a real 404.
 export const dynamicParams = false;
@@ -26,141 +28,159 @@ export default async function CaseStudyPage({
   const t = await getTranslations("caseStudy");
   const next = getNextProject(slug, locale);
   const { cover, gallery = [] } = project.images;
-  const linkClass = "underline underline-offset-4";
 
   return (
-    <article className="mx-auto max-w-5xl px-6 py-16">
+    <article className={`${container} pt-10 pb-24 sm:pt-16`}>
       <Link
         href={`/#${sectionId("projects", locale)}`}
-        className={`text-sm ${linkClass}`}
+        className="type-label hover:underline hover:underline-offset-4"
       >
-        {t("allProjects")}
+        ← {t("allProjects")}
       </Link>
 
-      <header className="mt-8">
-        <h1 className="text-4xl font-semibold tracking-tight">
-          {project.title}
-        </h1>
-        {project.tagline && (
-          <p className="mt-2 text-xl text-muted-foreground">
-            {project.tagline}
+      <header className="@container mt-10 grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-end md:gap-14">
+        <div className="hero-in">
+          <h1 className="type-display text-[clamp(2rem,12.5cqi,9rem)] break-words md:text-[clamp(2rem,7cqi,9rem)]">
+            {project.title}
+          </h1>
+          {project.tagline && (
+            <p className="mt-6 text-2xl font-semibold sm:text-3xl">
+              {project.tagline}
+            </p>
+          )}
+          <p className="mt-4 max-w-[50ch] text-lg text-muted-foreground">
+            {project.summary}
           </p>
-        )}
-        <p className="mt-6 max-w-2xl text-lg">{project.summary}</p>
-
-        <h2 className="sr-only">{t("facts")}</h2>
-        <dl className="mt-8 grid gap-4 sm:grid-cols-3">
-          <div>
-            <dt className="text-sm text-muted-foreground">{t("client")}</dt>
-            <dd>{project.client}</dd>
-          </div>
-          <div>
-            <dt className="text-sm text-muted-foreground">{t("year")}</dt>
-            <dd>{project.year}</dd>
-          </div>
-          <div>
-            <dt className="text-sm text-muted-foreground">{t("role")}</dt>
-            <dd>{project.role}</dd>
-          </div>
-        </dl>
-        <div className="mt-6">
-          <StackTags items={project.stack} label={t("stack")} />
         </div>
-        <ul className="mt-6 flex flex-wrap gap-4">
-          <li>
-            <ExternalLink href={project.links.live} className={linkClass}>
-              {t("liveSite")}
-            </ExternalLink>
-          </li>
-          {project.links.code && (
+        <div className="hero-in flex flex-col gap-6 [--delay:120ms]">
+          <h2 className="sr-only">{t("facts")}</h2>
+          <dl className="flex flex-col">
+            {[
+              [t("client"), project.client],
+              [t("year"), String(project.year)],
+              [t("role"), project.role],
+            ].map(([term, value]) => (
+              <div
+                key={term}
+                className="grid grid-cols-[6rem_minmax(0,1fr)] gap-4 border-t border-border py-3"
+              >
+                <dt className="pt-0.5 type-label text-muted-foreground">
+                  {term}
+                </dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+          <StackTags items={project.stack} label={t("stack")} />
+          <ul className="flex flex-wrap gap-x-8 gap-y-3 text-lg font-semibold">
             <li>
-              <ExternalLink href={project.links.code} className={linkClass}>
-                {t("code")}
+              <ExternalLink href={project.links.live} className={textLink}>
+                {t("liveSite")}
               </ExternalLink>
             </li>
-          )}
-        </ul>
+            {project.links.code && (
+              <li>
+                <ExternalLink href={project.links.code} className={textLink}>
+                  {t("code")}
+                </ExternalLink>
+              </li>
+            )}
+          </ul>
+        </div>
       </header>
 
-      <Image
-        src={cover.src}
-        alt={cover.alt}
-        width={cover.width}
-        height={cover.height}
-        sizes="(min-width: 1024px) 976px, 100vw"
-        preload
-        className="mt-12 h-auto w-full"
-      />
+      <div className="hero-clip mt-16">
+        <Image
+          src={cover.src}
+          alt={cover.alt}
+          width={cover.width}
+          height={cover.height}
+          sizes="(min-width: 1152px) 1088px, 100vw"
+          preload
+          className="h-auto w-full"
+        />
+      </div>
 
-      <CaseStudySection id="problem" title={t("problem")}>
-        <p>{project.problem}</p>
-      </CaseStudySection>
-
-      <CaseStudySection id="solution" title={t("solution")}>
-        <p>{project.solution}</p>
-      </CaseStudySection>
-
-      <CaseStudySection id="highlights" title={t("highlights")}>
-        <ul className="list-disc space-y-1 pl-5">
-          {project.highlights.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </CaseStudySection>
-
-      {project.results && (
-        <CaseStudySection id="results" title={t("results")}>
-          <ul className="list-disc space-y-1 pl-5">
-            {project.results.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
+      <div className="mt-20 flex flex-col gap-16 sm:mt-28 sm:gap-24">
+        <CaseStudySection id="problem" title={t("problem")}>
+          <p>{project.problem}</p>
         </CaseStudySection>
-      )}
 
-      {project.testimonial && (
-        <CaseStudySection id="testimonial" title={t("testimonial")}>
-          <figure>
-            <blockquote className="border-l-2 border-border pl-4 italic">
-              <p>{project.testimonial.quote}</p>
-            </blockquote>
-            <figcaption className="mt-2 text-sm text-muted-foreground">
-              {project.testimonial.author}
-            </figcaption>
-          </figure>
+        <CaseStudySection id="solution" title={t("solution")}>
+          <p>{project.solution}</p>
         </CaseStudySection>
-      )}
 
-      {gallery.length > 0 && (
-        <CaseStudySection id="gallery" title={t("gallery")}>
-          <ul className="grid gap-6 sm:grid-cols-2">
-            {gallery.map((image) => (
-              <li key={image.src}>
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  width={image.width}
-                  height={image.height}
-                  sizes="(min-width: 640px) 320px, 100vw"
-                  className="mx-auto h-auto w-full max-w-xs"
-                />
+        <CaseStudySection id="highlights" title={t("highlights")}>
+          <ul className="flex flex-col">
+            {project.highlights.map((item) => (
+              <li key={item} className="border-b border-border py-3 first:pt-0">
+                {item}
               </li>
             ))}
           </ul>
         </CaseStudySection>
-      )}
+
+        {project.results && (
+          <CaseStudySection id="results" title={t("results")}>
+            <ul className="flex flex-col">
+              {project.results.map((item) => (
+                <li
+                  key={item}
+                  className="border-b border-border py-3 first:pt-0"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </CaseStudySection>
+        )}
+
+        {project.testimonial && (
+          <CaseStudySection id="testimonial" title={t("testimonial")}>
+            <figure>
+              <blockquote className="text-2xl font-semibold">
+                <p>„{project.testimonial.quote}“</p>
+              </blockquote>
+              <figcaption className="mt-4 type-label text-muted-foreground">
+                {project.testimonial.author}
+              </figcaption>
+            </figure>
+          </CaseStudySection>
+        )}
+
+        {gallery.length > 0 && (
+          <CaseStudySection id="gallery" title={t("gallery")}>
+            <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+              {gallery.map((image) => (
+                <li key={image.src}>
+                  <Reveal variant="clip">
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      width={image.width}
+                      height={image.height}
+                      sizes="(min-width: 640px) 320px, 100vw"
+                      className="h-auto w-full max-w-xs"
+                    />
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </CaseStudySection>
+        )}
+      </div>
 
       {next && next.slug !== project.slug && (
         <nav
           aria-label={t("nextProject")}
-          className="mt-16 border-t border-border pt-8"
+          className="@container mt-28 border-t border-foreground pt-4"
         >
-          <p className="text-sm text-muted-foreground">{t("nextProject")}</p>
+          <p className="type-label text-muted-foreground">{t("nextProject")}</p>
           <Link
             href={`/projects/${next.slug}`}
-            className={`mt-1 inline-block text-2xl font-semibold ${linkClass}`}
+            className="mt-6 inline-block type-display text-[clamp(2rem,11cqi,7.5rem)] break-words decoration-4 underline-offset-8 hover:underline"
           >
-            {next.title}
+            {next.title} →
           </Link>
         </nav>
       )}

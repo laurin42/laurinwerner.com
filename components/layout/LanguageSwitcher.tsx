@@ -16,7 +16,7 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
       hrefLang={locale}
       lang={locale}
       aria-label={localeNames[locale]}
-      className="inline-flex h-10 items-center rounded-md px-2 text-sm font-medium hover:bg-muted"
+      className="inline-flex h-10 items-center px-3 type-label hover:underline hover:underline-offset-4"
     >
       {locale.toUpperCase()}
     </a>
