@@ -38,6 +38,16 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
 - Images: put sources in `<dir>/<slug>/` outside the repo and run
   `pnpm images <dir>`; it writes WebP to `public/images/projects/<slug>/`. Copy the
   printed width/height into the project file (a test checks they match).
+- Design (Laurin, Phase 4): layout "A" with typography "B". Black and white only,
+  OKLch tokens in `app/globals.css` (grey only for secondary text, AA contrast).
+  `type-display` = Archivo 800, 62 % width, uppercase; `type-label` = JetBrains Mono
+  small caps; body = Archivo. Projects are full-width entries without borders.
+  Shared container/link classes in `lib/ui.ts`. Grid tracks always `minmax(0, …)`;
+  long display titles are sized in `cqi` so they never overflow.
+- Motion: `<Reveal>` (GSAP, IntersectionObserver, `gsap.matchMedia`) for content
+  below the fold. The hero uses CSS-only `hero-in`/`hero-clip` so the LCP element
+  never waits for hydration. Content is only hidden under `.js` (inline script in
+  the layout) and without reduced motion; a CSS fallback reveals it after 2.5 s.
 - Client components get their strings as props; `NextIntlClientProvider` ships no
   messages. Homepage section anchors are localized via `lib/sections.ts`.
 - UI strings in `messages/*.json`; content (projects, experience, profile) as typed,
