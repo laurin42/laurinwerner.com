@@ -72,35 +72,37 @@ test.describe("motion", () => {
     await expect(contact).toHaveCSS("opacity", "1");
   });
 
-  test("hero name morphs into the header name and back", async ({ page }) => {
+  test("hero name flies into the header name and back", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.goto("/");
     const headerName = page.locator("[data-header-name]");
     const heroWord = page.locator("#hero-name [data-name-word]").first();
     const logoWord = headerName.locator("[data-name-word]").first();
     await expect(headerName).toBeHidden();
+    await expect(heroWord).toHaveCSS("opacity", "1");
 
-    // Halfway: the hero words are moving, the header name is still hidden.
-    await page.evaluate(() => window.scrollTo(0, 60));
-    await expect(heroWord).not.toHaveCSS("transform", "none");
-    await expect(headerName).toBeHidden();
+    // The morph starts once the CSS hero entrance has finished.
+    await page.waitForFunction(() =>
+      document
+        .getAnimations()
+        .every((animation) => animation.playState === "finished"),
+    );
+    const resting = () =>
+      logoWord.evaluate((el) =>
+        ["none", "matrix(1, 0, 0, 1, 0, 0)"].includes(
+          getComputedStyle(el).transform,
+        ),
+      );
 
-    // Past the hero: the words sit exactly on the header name, which takes over.
-    await page.evaluate(() => window.scrollTo(0, 1200));
+    // Once the hero name slides under the header, the logo takes over and its
+    // words fly from the hero into place.
+    await page.evaluate(() => window.scrollTo(0, 600));
     await expect(headerName).toBeVisible();
     await expect(heroWord).toHaveCSS("opacity", "0");
-    const [from, to] = [
-      await heroWord.boundingBox(),
-      await logoWord.boundingBox(),
-    ];
-    // Same font, different line heights: compare widths and vertical centers.
-    expect(Math.abs(from!.x - to!.x)).toBeLessThan(2);
-    expect(Math.abs(from!.width - to!.width)).toBeLessThan(2);
-    expect(
-      Math.abs(from!.y + from!.height / 2 - (to!.y + to!.height / 2)),
-    ).toBeLessThan(2);
+    expect(await resting()).toBe(false);
+    await expect.poll(resting).toBe(true);
 
-    // Back to the top: everything returns.
+    // Back to the top: the words fly back and the hero shows its name again.
     await page.evaluate(() => window.scrollTo(0, 0));
     await expect(headerName).toBeHidden();
     await expect(heroWord).toHaveCSS("opacity", "1");
@@ -114,12 +116,9 @@ test.describe("motion", () => {
     await page.goto("/");
     const headerName = page.locator("[data-header-name]");
     await expect(headerName).toBeHidden();
-    await page.evaluate(() => window.scrollTo(0, 1200));
+    await page.evaluate(() => window.scrollTo(0, 600));
     await expect(headerName).toBeVisible();
-    await expect(page.locator("#hero-name [data-name-word]").first()).toHaveCSS(
-      "transform",
-      "none",
-    );
+    expect(await page.evaluate(() => document.getAnimations().length)).toBe(0);
   });
 
   test("layout shift stays below 0.05", async ({ page }) => {
@@ -156,6 +155,22 @@ test.describe("without JavaScript", () => {
     await page.goto("/");
     await expect(page.locator("[data-header-name]")).toBeVisible();
   });
+});
+
+test.describe("hero", () => {
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 1280, height: 720 },
+    { width: 390, height: 844 },
+  ]) {
+    test(`fills the first screen at ${viewport.width}×${viewport.height}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport);
+      await page.goto("/");
+      await expect(page.locator("#projekte-heading")).not.toBeInViewport();
+    });
+  }
 });
 
 test.describe("small screens", () => {

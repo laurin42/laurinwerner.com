@@ -40,17 +40,19 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
   printed width/height into the project file (a test checks they match).
 - Design (Laurin, Phase 4): layout "A" with typography "B". Black and white only,
   OKLch tokens in `app/globals.css` (grey only for secondary text, AA contrast).
-  `type-display` = Archivo 800, 62 % width, uppercase; `type-label` = JetBrains Mono
-  small caps; body = Archivo. Projects are single-column, centered, full-width
+  `type-display` = Archivo 800, 62 % width, uppercase; `type-label` = Archivo
+  600, small, uppercase, spaced; body = Archivo. Projects are single-column, centered, full-width
   entries without borders (image, title on one line across the full width, text).
   Shared container/link classes in `lib/ui.ts`. Grid tracks always `minmax(0, …)`;
   long display titles are sized in `cqi` so they never overflow.
 - Motion: `<Reveal>` (GSAP, IntersectionObserver, `gsap.matchMedia`) for content
   below the fold. The hero uses CSS-only `hero-in`/`hero-clip` so the LCP element
-  never waits for hydration. On the homepage `<NameMorph>` morphs the hero name
-  word by word into the header name on scroll (scroll listener + GSAP, no
-  ScrollTrigger); with reduced motion the header name just appears, without JS
-  it is always visible. Content is only hidden under `.js` (inline script in the layout) and without
+  never waits for hydration. On the homepage `<NameMorph>` flies the hero name
+  word by word into the header name once it slides under the header, and back
+  (IntersectionObserver + time-based GSAP FLIP). Never position elements from
+  the scroll position frame by frame: it jitters, because the browser scrolls
+  on another thread. With reduced motion the swap is instant, without JS the
+  header name is always visible. Content is only hidden under `.js` (inline script in the layout) and without
   reduced motion; a CSS fallback reveals it after 2.5 s.
 - Client components get their strings as props; `NextIntlClientProvider` ships no
   messages. Homepage section anchors are localized via `lib/sections.ts`.
