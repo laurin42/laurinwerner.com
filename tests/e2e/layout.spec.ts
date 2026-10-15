@@ -136,23 +136,29 @@ test.describe("desktop navigation", () => {
     await expect(page.locator("#projects")).toBeInViewport();
   });
 
-  test("is fully reachable by keyboard", async ({ page }) => {
-    await page.goto("/");
-    const expected = [
-      "Zum Inhalt springen",
-      "Laurin Werner",
-      "Projekte",
-      "Über mich",
-      "Werdegang",
-      "Kontakt",
-      "English",
-      "Farbschema wechseln",
-    ];
-    for (const name of expected) {
-      await page.keyboard.press("Tab");
-      await expect(page.locator(":focus")).toHaveAccessibleName(name);
-    }
-  });
+  for (const [path, withName] of [
+    // On the homepage the hero shows the name; the hidden header copy is skipped.
+    ["/", false],
+    ["/projects/burchartz", true],
+  ] as const) {
+    test(`is fully reachable by keyboard on ${path}`, async ({ page }) => {
+      await page.goto(path);
+      const expected = [
+        "Zum Inhalt springen",
+        ...(withName ? ["Laurin Werner"] : []),
+        "Projekte",
+        "Über mich",
+        "Werdegang",
+        "Kontakt",
+        "English",
+        "Farbschema wechseln",
+      ];
+      for (const name of expected) {
+        await page.keyboard.press("Tab");
+        await expect(page.locator(":focus")).toHaveAccessibleName(name);
+      }
+    });
+  }
 });
 
 test.describe("mobile menu", () => {

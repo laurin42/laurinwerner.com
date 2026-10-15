@@ -41,13 +41,17 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
 - Design (Laurin, Phase 4): layout "A" with typography "B". Black and white only,
   OKLch tokens in `app/globals.css` (grey only for secondary text, AA contrast).
   `type-display` = Archivo 800, 62 % width, uppercase; `type-label` = JetBrains Mono
-  small caps; body = Archivo. Projects are full-width entries without borders.
+  small caps; body = Archivo. Projects are single-column, full-width entries without borders (image,
+  title on one line across the full width, text).
   Shared container/link classes in `lib/ui.ts`. Grid tracks always `minmax(0, …)`;
   long display titles are sized in `cqi` so they never overflow.
 - Motion: `<Reveal>` (GSAP, IntersectionObserver, `gsap.matchMedia`) for content
   below the fold. The hero uses CSS-only `hero-in`/`hero-clip` so the LCP element
-  never waits for hydration. Content is only hidden under `.js` (inline script in
-  the layout) and without reduced motion; a CSS fallback reveals it after 2.5 s.
+  never waits for hydration. The header name fades in via a CSS scroll-driven
+  animation once the hero `h1#hero-name` has scrolled under the header (no JS;
+  always visible without support, with reduced motion and on other pages).
+  Content is only hidden under `.js` (inline script in the layout) and without
+  reduced motion; a CSS fallback reveals it after 2.5 s.
 - Client components get their strings as props; `NextIntlClientProvider` ships no
   messages. Homepage section anchors are localized via `lib/sections.ts`.
 - UI strings in `messages/*.json`; content (projects, experience, profile) as typed,

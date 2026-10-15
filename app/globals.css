@@ -61,6 +61,8 @@
   }
 
   body {
+    /* Lets the header see the hero name's view timeline (see below). */
+    timeline-scope: --hero-name;
     background: var(--background);
     color: var(--foreground);
   }
@@ -106,6 +108,39 @@
 
   .hero-clip {
     animation: hero-uncover 1.2s cubic-bezier(0.7, 0, 0.2, 1) 0.15s both;
+  }
+}
+
+/*
+ * The header name fades in once the hero name has scrolled under the header,
+ * driven by scroll position in CSS alone. Pages without a hero have no timeline,
+ * so the header name stays visible; so it does in browsers without scroll-driven
+ * animations and with reduced motion.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    #hero-name {
+      view-timeline: --hero-name;
+      /* The sticky header (h-16) covers the top of the viewport. */
+      view-timeline-inset: 4rem 0;
+    }
+
+    [data-header-name] {
+      animation: header-name-in linear both;
+      animation-timeline: --hero-name;
+      animation-range: exit 50% exit 100%;
+    }
+  }
+}
+
+@keyframes header-name-in {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
   }
 }
 

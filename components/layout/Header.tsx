@@ -28,6 +28,7 @@ export async function Header() {
       >
         <Link
           href={home}
+          data-header-name
           className="type-display text-xl whitespace-nowrap sm:text-2xl"
         >
           {siteConfig.name}

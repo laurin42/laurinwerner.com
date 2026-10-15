@@ -72,6 +72,27 @@ test.describe("motion", () => {
     await expect(contact).toHaveCSS("opacity", "1");
   });
 
+  test("header name appears once the hero name has scrolled away", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/");
+    const headerName = page.locator("[data-header-name]");
+    await expect(headerName).toBeHidden();
+    await page.evaluate(() =>
+      window.scrollTo(0, document.querySelector("h1")!.offsetHeight + 400),
+    );
+    await expect(headerName).toBeVisible();
+    await expect(headerName).toHaveCSS("opacity", "1");
+
+    await page.goto("/projects/burchartz");
+    await expect(headerName).toBeVisible();
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await expect(headerName).toBeVisible();
+  });
+
   test("layout shift stays below 0.05", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     for (const path of ["/", "/projects/burchartz"]) {
