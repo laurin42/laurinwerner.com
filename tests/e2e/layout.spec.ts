@@ -100,9 +100,13 @@ test.describe("layout", () => {
     const html = page.locator("html");
     await expect(html).toHaveClass(/light/);
 
-    await page.getByRole("button", { name: "Farbschema wechseln" }).click();
-    await expect(html).toHaveClass(/dark/);
-    await page.getByRole("button", { name: "Farbschema wechseln" }).click();
+    const toggle = page.getByRole("button", { name: "Farbschema wechseln" });
+    // Retry the first click in case it lands before hydration.
+    await expect(async () => {
+      await toggle.click({ timeout: 1000 });
+      await expect(html).toHaveClass(/dark/, { timeout: 1000 });
+    }).toPass();
+    await toggle.click();
     await expect(html).toHaveClass(/light/);
   });
 

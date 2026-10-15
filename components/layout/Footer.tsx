@@ -1,11 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { ExternalLink } from "@/components/ui/ExternalLink";
 import { getProfile } from "@/content";
 import { Link } from "@/i18n/navigation";
-
-async function currentYear() {
-  "use cache";
-  return new Date().getFullYear();
-}
 
 const linkClass = "hover:text-foreground hover:underline";
 
@@ -13,7 +9,8 @@ export async function Footer() {
   const locale = await getLocale();
   const t = await getTranslations("footer");
   const profile = getProfile(locale);
-  const year = await currentYear();
+  // Pages are static, so this is the build year.
+  const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-border">
@@ -29,22 +26,14 @@ export async function Footer() {
               </a>
             </li>
             <li>
-              <a
-                href={profile.links.github}
-                rel="noopener noreferrer"
-                className={linkClass}
-              >
+              <ExternalLink href={profile.links.github} className={linkClass}>
                 GitHub
-              </a>
+              </ExternalLink>
             </li>
             <li>
-              <a
-                href={profile.links.linkedin}
-                rel="noopener noreferrer"
-                className={linkClass}
-              >
+              <ExternalLink href={profile.links.linkedin} className={linkClass}>
                 LinkedIn
-              </a>
+              </ExternalLink>
             </li>
           </ul>
         </nav>

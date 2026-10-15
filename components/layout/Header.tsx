@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { getPathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { sectionId, sections } from "@/lib/sections";
 import { siteConfig } from "@/lib/site-config";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -11,6 +12,8 @@ export async function Header() {
   const locale = await getLocale();
   const t = await getTranslations("nav");
   const home = getPathname({ href: "/", locale });
+  const otherLocale =
+    routing.locales.find((l) => l !== locale) ?? routing.defaultLocale;
   // Real anchor links on the homepage, so navigation works without JavaScript.
   const items = sections.map((section) => ({
     href: `${home}#${sectionId(section, locale)}`,
@@ -38,7 +41,7 @@ export async function Header() {
               ))}
             </ul>
           </nav>
-          <LanguageSwitcher />
+          <LanguageSwitcher locale={otherLocale} />
           <ThemeToggle label={t("toggleTheme")} />
           <MobileMenu
             items={items}

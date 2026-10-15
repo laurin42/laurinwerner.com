@@ -1,26 +1,24 @@
 "use client";
 
-import { useLocale } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
-import { localeNames, routing } from "@/i18n/routing";
+import { getPathname, usePathname } from "@/i18n/navigation";
+import { type Locale, localeNames } from "@/i18n/routing";
 
-/** Links to the current page in the other language. */
-export function LanguageSwitcher() {
-  const locale = useLocale();
+/**
+ * Links to the current page in `locale`. A plain link is enough: switching the
+ * language swaps the root layout, so it is a full page load either way.
+ */
+export function LanguageSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname();
-  const target =
-    routing.locales.find((l) => l !== locale) ?? routing.defaultLocale;
 
   return (
-    <Link
-      href={pathname}
-      locale={target}
-      hrefLang={target}
-      lang={target}
-      aria-label={localeNames[target]}
+    <a
+      href={getPathname({ href: pathname, locale })}
+      hrefLang={locale}
+      lang={locale}
+      aria-label={localeNames[locale]}
       className="inline-flex h-10 items-center rounded-md px-2 text-sm font-medium hover:bg-muted"
     >
-      {target.toUpperCase()}
-    </Link>
+      {locale.toUpperCase()}
+    </a>
   );
 }
