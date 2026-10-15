@@ -29,6 +29,12 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
   (`localePrefix: "as-needed"`). The locale comes from `next/root-params` in
   `i18n/request.ts` (keeps pages static under `cacheComponents`). No locale cookie
   and no Accept-Language detection: the URL alone decides the language.
+- Content: `content/schema.ts` (zod) → data files → `content/index.ts`, which validates
+  at module load and returns localized objects (`getProjects(locale)`, …) via
+  `localize()`. Missing facts are `TODO(laurin): …` strings, never invented text.
+- Images: put sources in `<dir>/<slug>/` outside the repo and run
+  `pnpm images <dir>`; it writes WebP to `public/images/projects/<slug>/`. Copy the
+  printed width/height into the project file (a test checks they match).
 - Client components get their strings as props; `NextIntlClientProvider` ships no
   messages. Homepage section anchors are localized via `lib/sections.ts`.
 - UI strings in `messages/*.json`; content (projects, experience, profile) as typed,
