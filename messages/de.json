@@ -23,5 +23,33 @@
     "title": "Seite nicht gefunden",
     "description": "Diese Seite gibt es nicht oder nicht mehr.",
     "backHome": "Zur Startseite"
+  },
+  "home": {
+    "viewProjects": "Projekte ansehen",
+    "contact": "Kontakt",
+    "location": "Standort",
+    "stackHeading": "Stack",
+    "cvDownload": "Lebenslauf herunterladen (PDF)",
+    "cvMissing": "TODO(laurin): Lebenslauf als PDF",
+    "present": "heute",
+    "contactEmail": "E-Mail",
+    "techStack": "Technologien"
+  },
+  "caseStudy": {
+    "facts": "Eckdaten",
+    "client": "Kunde",
+    "year": "Jahr",
+    "role": "Rolle",
+    "stack": "Stack",
+    "liveSite": "Website ansehen",
+    "code": "Code ansehen",
+    "problem": "Ausgangslage",
+    "solution": "Lösung",
+    "highlights": "Highlights",
+    "results": "Ergebnisse",
+    "testimonial": "Kundenstimme",
+    "gallery": "Galerie",
+    "nextProject": "Nächstes Projekt",
+    "allProjects": "Alle Projekte"
   }
 }

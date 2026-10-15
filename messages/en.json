@@ -23,5 +23,33 @@
     "title": "Page not found",
     "description": "This page does not exist or no longer exists.",
     "backHome": "Back to the homepage"
+  },
+  "home": {
+    "viewProjects": "View projects",
+    "contact": "Contact",
+    "location": "Location",
+    "stackHeading": "Stack",
+    "cvDownload": "Download CV (PDF)",
+    "cvMissing": "TODO(laurin): CV as PDF",
+    "present": "present",
+    "contactEmail": "Email",
+    "techStack": "Technologies"
+  },
+  "caseStudy": {
+    "facts": "Key facts",
+    "client": "Client",
+    "year": "Year",
+    "role": "Role",
+    "stack": "Stack",
+    "liveSite": "Visit website",
+    "code": "View code",
+    "problem": "Starting point",
+    "solution": "Solution",
+    "highlights": "Highlights",
+    "results": "Results",
+    "testimonial": "Client feedback",
+    "gallery": "Gallery",
+    "nextProject": "Next project",
+    "allProjects": "All projects"
   }
 }

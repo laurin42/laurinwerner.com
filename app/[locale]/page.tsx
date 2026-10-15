@@ -1,36 +1,20 @@
-import { getLocale, getTranslations } from "next-intl/server";
-import { getProfile } from "@/content";
-import { sectionId, sections } from "@/lib/sections";
+import { getLocale } from "next-intl/server";
+import { About } from "@/components/sections/About";
+import { Contact } from "@/components/sections/Contact";
+import { Experience } from "@/components/sections/Experience";
+import { Hero } from "@/components/sections/Hero";
+import { Projects } from "@/components/sections/Projects";
 
-// Skeleton only: the real sections follow in Phase 3.
 export default async function HomePage() {
   const locale = await getLocale();
-  const t = await getTranslations("nav");
-  const profile = getProfile(locale);
 
   return (
     <div className="mx-auto max-w-5xl px-6">
-      <div className="py-24">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          {profile.name}
-        </h1>
-        <p className="mt-2 text-muted-foreground">{profile.role}</p>
-      </div>
-      {sections.map((section) => {
-        const id = sectionId(section, locale);
-        return (
-          <section
-            key={section}
-            id={id}
-            aria-labelledby={`${id}-heading`}
-            className="py-16"
-          >
-            <h2 id={`${id}-heading`} className="text-2xl font-semibold">
-              {t(section)}
-            </h2>
-          </section>
-        );
-      })}
+      <Hero locale={locale} />
+      <Projects locale={locale} />
+      <About locale={locale} />
+      <Experience locale={locale} />
+      <Contact locale={locale} />
     </div>
   );
 }
