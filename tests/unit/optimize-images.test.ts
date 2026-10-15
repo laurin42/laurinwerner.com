@@ -26,6 +26,12 @@ describe("outputPath", () => {
     );
   });
 
+  it("writes to a custom output directory", () => {
+    expect(
+      outputPath("profile", "portrait.jpg", path.join("public", "images")),
+    ).toBe(path.join("public", "images", "profile", "portrait.webp"));
+  });
+
   it("ignores non-image files", () => {
     expect(outputPath("burchartz", "notes.txt")).toBeNull();
     expect(outputPath("burchartz", ".DS_Store")).toBeNull();

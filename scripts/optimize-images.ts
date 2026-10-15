@@ -1,12 +1,14 @@
 /**
  * Converts project screenshots to WebP for `public/images/projects/`.
  *
- * Usage: pnpm images <source-dir>
+ * Usage: pnpm images <source-dir> [output-dir]
  *
  * The source directory contains one folder per project slug:
  *   <source-dir>/<slug>/<name>.(png|jpg|jpeg|webp|avif)
  * Each image is scaled to fit inside MAX_SIZE × MAX_SIZE (never enlarged) and
- * written to public/images/projects/<slug>/<kebab-name>.webp.
+ * written to <output-dir>/<slug>/<kebab-name>.webp. The output directory defaults
+ * to public/images/projects; use public/images for non-project images (e.g. a
+ * `profile/` folder with the portrait).
  * Originals stay outside the repo.
  */
 import { mkdir, readdir, stat } from "node:fs/promises";
@@ -30,10 +32,14 @@ export function kebabCase(name: string): string {
 }
 
 /** Output path for a source file, or `null` if the file is not an image. */
-export function outputPath(slug: string, fileName: string): string | null {
+export function outputPath(
+  slug: string,
+  fileName: string,
+  outputDir: string = OUTPUT_DIR,
+): string | null {
   const { name, ext } = path.parse(fileName);
   if (!SOURCE_EXTENSIONS.has(ext.toLowerCase())) return null;
-  return path.join(OUTPUT_DIR, kebabCase(slug), `${kebabCase(name)}.webp`);
+  return path.join(outputDir, kebabCase(slug), `${kebabCase(name)}.webp`);
 }
 
 async function convert(source: string, target: string) {
@@ -50,9 +56,9 @@ async function convert(source: string, target: string) {
   return { width: info.width, height: info.height, bytes: info.size };
 }
 
-async function main(sourceDir: string | undefined) {
+async function main(sourceDir: string | undefined, outputDir = OUTPUT_DIR) {
   if (!sourceDir) {
-    console.error("Usage: pnpm images <source-dir>");
+    console.error("Usage: pnpm images <source-dir> [output-dir]");
     process.exit(1);
   }
 
@@ -64,7 +70,7 @@ async function main(sourceDir: string | undefined) {
     if (!(await stat(dir)).isDirectory()) continue;
 
     for (const file of await readdir(dir)) {
-      const target = outputPath(slug, file);
+      const target = outputPath(slug, file, outputDir);
       if (!target) continue;
 
       const source = path.join(dir, file);
@@ -84,5 +90,5 @@ async function main(sourceDir: string | undefined) {
 }
 
 if (import.meta.main) {
-  await main(process.argv[2]);
+  await main(process.argv[2], process.argv[3]);
 }

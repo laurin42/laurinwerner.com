@@ -42,10 +42,13 @@ async function dirSize(dir: string): Promise<number> {
   return total;
 }
 
-const images = rawContent.projects.flatMap((project) => [
-  project.images.cover,
-  ...(project.images.gallery ?? []),
-]);
+const images = [
+  rawContent.profile.portrait,
+  ...rawContent.projects.flatMap((project) => [
+    project.images.cover,
+    ...(project.images.gallery ?? []),
+  ]),
+];
 
 describe("content", () => {
   it("matches the schemas", () => {
@@ -82,7 +85,7 @@ describe("content", () => {
   });
 });
 
-describe("project images", () => {
+describe("images", () => {
   it.each(images.map((image) => [image.src, image] as const))(
     "%s exists, is small enough and has the declared size",
     async (src, image) => {

@@ -70,6 +70,7 @@ export const profileSchema = z
     name: text,
     role: localized(text),
     location: text,
+    portrait: imageSchema,
     /** One-sentence positioning for the hero. */
     tagline: localized(text),
     availability: localized(text),

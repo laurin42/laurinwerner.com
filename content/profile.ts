@@ -4,6 +4,12 @@ export const profile: Profile = {
   name: "Laurin Werner",
   role: { de: "Frontend-Entwickler", en: "Frontend Developer" },
   location: "Düsseldorf",
+  portrait: {
+    src: "/images/profile/portrait.webp",
+    alt: { de: "Porträt von Laurin Werner", en: "Portrait of Laurin Werner" },
+    width: 852,
+    height: 1136,
+  },
   tagline: {
     de: "TODO(laurin): Ein Satz Positionierung für den Hero",
     en: "TODO(laurin): one-sentence positioning for the hero",
