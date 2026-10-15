@@ -12,8 +12,8 @@ type ProjectEntryProps = {
 };
 
 /**
- * One project across the full content width: image, then title and text in two
- * columns. The whole entry is clickable via a stretched title link, so the link
+ * One project in a single column across the full content width: image, title,
+ * text. The whole entry is clickable via a stretched title link, so the link
  * text stays the project title.
  */
 export function ProjectEntry({
@@ -36,10 +36,10 @@ export function ProjectEntry({
           className="h-auto w-full"
         />
       </Reveal>
-      <Reveal className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:gap-12">
-        {/* Sized to the entry width (cqi) to match the title column, so even
-            "Wetterstrucksi.de" fits on one line. */}
-        <h3 className="type-display text-[clamp(2rem,13cqi,5.5rem)] break-words md:text-[clamp(2rem,7cqi,5.5rem)]">
+      <Reveal className="mt-6 flex flex-col gap-6 sm:mt-8">
+        {/* Sized to the entry width (cqi) so the longest title, "Praxis Janis
+            Werner", still spans the full width on one line. */}
+        <h3 className="type-display text-[12cqi] break-words">
           <Link
             href={`/projects/${project.slug}`}
             className="decoration-4 underline-offset-8 group-hover:underline after:absolute after:inset-0"
@@ -47,7 +47,7 @@ export function ProjectEntry({
             {project.title}
           </Link>
         </h3>
-        <div className="flex flex-col gap-4">
+        <div className="flex max-w-[60ch] flex-col gap-4">
           <p className="text-lg">{project.summary}</p>
           <StackTags items={project.stack} label={stackLabel} />
         </div>
