@@ -61,8 +61,6 @@
   }
 
   body {
-    /* Lets the header see the hero name's view timeline (see below). */
-    timeline-scope: --hero-name;
     background: var(--background);
     color: var(--foreground);
   }
@@ -112,36 +110,22 @@
 }
 
 /*
- * The header name fades in once the hero name has scrolled under the header,
- * driven by scroll position in CSS alone. Pages without a hero have no timeline,
- * so the header name stays visible; so it does in browsers without scroll-driven
- * animations and with reduced motion.
+ * <NameMorph> (components/motion/NameMorph.tsx) morphs the hero name into the
+ * header name on scroll. On the homepage the header name starts hidden, but only
+ * when JavaScript runs; while the words travel they sit above the sticky header,
+ * unless the mobile menu is open.
  */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    #hero-name {
-      view-timeline: --hero-name;
-      /* The sticky header (h-16) covers the top of the viewport. */
-      view-timeline-inset: 4rem 0;
-    }
-
-    [data-header-name] {
-      animation: header-name-in linear both;
-      animation-timeline: --hero-name;
-      animation-range: exit 50% exit 100%;
-    }
-  }
+.js body:has(#hero-name) [data-header-name] {
+  visibility: hidden;
 }
 
-@keyframes header-name-in {
-  from {
-    opacity: 0;
-    visibility: hidden;
-  }
-  to {
-    opacity: 1;
-    visibility: visible;
-  }
+#hero-name[data-morphing] {
+  position: relative;
+  z-index: 45;
+}
+
+body:has(header [aria-expanded="true"]) #hero-name {
+  z-index: auto;
 }
 
 @keyframes hero-rise {

@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
+import { NameMorph } from "@/components/motion/NameMorph";
+import { NameWords } from "@/components/ui/NameWords";
 import { getProfile } from "@/content";
 import type { Locale } from "@/i18n/routing";
 import { sectionId } from "@/lib/sections";
@@ -21,10 +23,11 @@ export async function Hero({ locale }: { locale: Locale }) {
             starts exactly at the top edge of the portrait. */}
         <h1
           id="hero-name"
-          className="hero-in type-display text-[clamp(4rem,15vw,10.5rem)] [text-box:trim-both_cap_alphabetic]"
+          className="hero-in type-display text-[clamp(3rem,12vw,7.5rem)] [text-box:trim-both_cap_alphabetic]"
         >
-          {profile.name}
+          <NameWords name={profile.name} />
         </h1>
+        <NameMorph />
         <div className="hero-in [--delay:120ms]">
           <p className="mt-6 text-2xl font-semibold sm:text-3xl">
             {profile.role}

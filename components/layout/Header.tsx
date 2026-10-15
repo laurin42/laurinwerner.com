@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { sectionId, sections } from "@/lib/sections";
+import { NameWords } from "@/components/ui/NameWords";
 import { siteConfig } from "@/lib/site-config";
 import { container } from "@/lib/ui";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -31,7 +32,7 @@ export async function Header() {
           data-header-name
           className="type-display text-xl whitespace-nowrap sm:text-2xl"
         >
-          {siteConfig.name}
+          <NameWords name={siteConfig.name} />
         </Link>
         <div className="flex items-center gap-1">
           <nav aria-label={t("label")} className="hidden md:block">

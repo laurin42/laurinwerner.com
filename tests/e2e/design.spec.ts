@@ -72,25 +72,54 @@ test.describe("motion", () => {
     await expect(contact).toHaveCSS("opacity", "1");
   });
 
-  test("header name appears once the hero name has scrolled away", async ({
-    page,
-  }) => {
+  test("hero name morphs into the header name and back", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.goto("/");
     const headerName = page.locator("[data-header-name]");
+    const heroWord = page.locator("#hero-name [data-name-word]").first();
+    const logoWord = headerName.locator("[data-name-word]").first();
     await expect(headerName).toBeHidden();
-    await page.evaluate(() =>
-      window.scrollTo(0, document.querySelector("h1")!.offsetHeight + 400),
-    );
+
+    // Halfway: the hero words are moving, the header name is still hidden.
+    await page.evaluate(() => window.scrollTo(0, 60));
+    await expect(heroWord).not.toHaveCSS("transform", "none");
+    await expect(headerName).toBeHidden();
+
+    // Past the hero: the words sit exactly on the header name, which takes over.
+    await page.evaluate(() => window.scrollTo(0, 1200));
     await expect(headerName).toBeVisible();
-    await expect(headerName).toHaveCSS("opacity", "1");
+    await expect(heroWord).toHaveCSS("opacity", "0");
+    const [from, to] = [
+      await heroWord.boundingBox(),
+      await logoWord.boundingBox(),
+    ];
+    // Same font, different line heights: compare widths and vertical centers.
+    expect(Math.abs(from!.x - to!.x)).toBeLessThan(2);
+    expect(Math.abs(from!.width - to!.width)).toBeLessThan(2);
+    expect(
+      Math.abs(from!.y + from!.height / 2 - (to!.y + to!.height / 2)),
+    ).toBeLessThan(2);
+
+    // Back to the top: everything returns.
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(headerName).toBeHidden();
+    await expect(heroWord).toHaveCSS("opacity", "1");
 
     await page.goto("/projects/burchartz");
     await expect(headerName).toBeVisible();
+  });
 
+  test("with reduced motion the header name just appears", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
+    const headerName = page.locator("[data-header-name]");
+    await expect(headerName).toBeHidden();
+    await page.evaluate(() => window.scrollTo(0, 1200));
     await expect(headerName).toBeVisible();
+    await expect(page.locator("#hero-name [data-name-word]").first()).toHaveCSS(
+      "transform",
+      "none",
+    );
   });
 
   test("layout shift stays below 0.05", async ({ page }) => {
@@ -117,6 +146,15 @@ test.describe("motion", () => {
       );
       expect(cls, path).toBeLessThan(0.05);
     }
+  });
+});
+
+test.describe("without JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("the header name is always visible", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("[data-header-name]")).toBeVisible();
   });
 });
 
