@@ -26,7 +26,11 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
 - Next.js 16 App Router, React 19, TypeScript strict + `noUncheckedIndexedAccess`.
 - Server Components by default. Pages are statically generated.
 - i18n with next-intl: German default without prefix (`/`), English under `/en`
-  (`localePrefix: "as-needed"`).
+  (`localePrefix: "as-needed"`). The locale comes from `next/root-params` in
+  `i18n/request.ts` (keeps pages static under `cacheComponents`). No locale cookie
+  and no Accept-Language detection: the URL alone decides the language.
+- Client components get their strings as props; `NextIntlClientProvider` ships no
+  messages. Homepage section anchors are localized via `lib/sections.ts`.
 - UI strings in `messages/*.json`; content (projects, experience, profile) as typed,
   zod-validated objects in `content/`. One source of truth per text.
 - Animation: GSAP + `@gsap/react` only, as progressive enhancement. No scroll
