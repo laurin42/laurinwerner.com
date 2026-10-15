@@ -14,7 +14,9 @@ export async function Hero({ locale }: { locale: Locale }) {
 
   return (
     <div
-      className={`${container} grid grid-cols-1 gap-10 pt-12 pb-8 sm:pt-20 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-start md:gap-14`}
+      // Fills the first screen below the header, so the next section starts below
+      // the fold and the calls to action stand on their own.
+      className={`${container} grid min-h-[calc(100svh-4rem)] grid-cols-1 content-center gap-10 py-12 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-start md:gap-14`}
     >
       <div>
         {/* CSS-only entrance (globals.css): it starts with the first paint instead
