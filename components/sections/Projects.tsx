@@ -14,6 +14,7 @@ export async function Projects({ locale }: { locale: Locale }) {
       id={sectionId("projects", locale)}
       title={t("nav.projects")}
       meta={t("home.projectCount", { count: projects.length })}
+      centered
     >
       <ul className="flex flex-col gap-24 sm:gap-36">
         {projects.map((project, index) => (

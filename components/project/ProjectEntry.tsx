@@ -12,8 +12,8 @@ type ProjectEntryProps = {
 };
 
 /**
- * One project in a single column across the full content width: image, title,
- * text. The whole entry is clickable via a stretched title link, so the link
+ * One project in a single, centered column across the full content width:
+ * image, title, text. The whole entry is clickable via a stretched title link, so the link
  * text stays the project title.
  */
 export function ProjectEntry({
@@ -36,7 +36,7 @@ export function ProjectEntry({
           className="h-auto w-full"
         />
       </Reveal>
-      <Reveal className="mt-6 flex flex-col gap-6 sm:mt-8">
+      <Reveal className="mt-6 flex flex-col items-center gap-6 text-center sm:mt-8">
         {/* Sized to the entry width (cqi) so the longest title, "Praxis Janis
             Werner", still spans the full width on one line. */}
         <h3 className="type-display text-[12cqi] break-words">
@@ -49,7 +49,11 @@ export function ProjectEntry({
         </h3>
         <div className="flex max-w-[60ch] flex-col gap-4">
           <p className="text-lg">{project.summary}</p>
-          <StackTags items={project.stack} label={stackLabel} />
+          <StackTags
+            items={project.stack}
+            label={stackLabel}
+            className="justify-center"
+          />
         </div>
       </Reveal>
     </article>
