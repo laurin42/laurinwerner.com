@@ -13,6 +13,8 @@
     "toggleTheme": "Toggle color scheme"
   },
   "footer": {
+    "contactNav": "Contact and profiles",
+    "email": "Email",
     "legalNav": "Legal",
     "imprint": "Legal notice",
     "privacy": "Privacy policy"

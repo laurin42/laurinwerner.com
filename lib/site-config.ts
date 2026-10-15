@@ -1,4 +1,4 @@
-import type { Locale } from "@/i18n/routing";
+import { rawContent } from "@/content";
 
 /** Normalizes a base URL to its origin, e.g. `https://example.com/` → `https://example.com`. */
 export function resolveSiteUrl(raw: string | undefined): string {
@@ -6,10 +6,6 @@ export function resolveSiteUrl(raw: string | undefined): string {
 }
 
 export const siteConfig = {
-  name: "Laurin Werner",
-  role: {
-    de: "Frontend-Entwickler",
-    en: "Frontend Developer",
-  } satisfies Record<Locale, string>,
+  name: rawContent.profile.name,
   url: resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL),
 };

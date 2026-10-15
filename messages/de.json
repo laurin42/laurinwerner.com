@@ -13,6 +13,8 @@
     "toggleTheme": "Farbschema wechseln"
   },
   "footer": {
+    "contactNav": "Kontakt und Profile",
+    "email": "E-Mail",
     "legalNav": "Rechtliches",
     "imprint": "Impressum",
     "privacy": "Datenschutz"
