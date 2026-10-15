@@ -12,12 +12,17 @@ export async function Hero({ locale }: { locale: Locale }) {
 
   return (
     <div
-      className={`${container} grid grid-cols-1 gap-10 pt-12 pb-8 sm:pt-20 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-end md:gap-14`}
+      className={`${container} grid grid-cols-1 gap-10 pt-12 pb-8 sm:pt-20 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-start md:gap-14`}
     >
       <div>
         {/* CSS-only entrance (globals.css): it starts with the first paint instead
-            of waiting for hydration, so the largest element is not held back. */}
-        <h1 className="hero-in type-display text-[clamp(4rem,15vw,10.5rem)]">
+            of waiting for hydration, so the largest element is not held back.
+            `text-box` trims the line box to the cap height, so the first line
+            starts exactly at the top edge of the portrait. */}
+        <h1
+          id="hero-name"
+          className="hero-in type-display text-[clamp(4rem,15vw,10.5rem)] [text-box:trim-both_cap_alphabetic]"
+        >
           {profile.name}
         </h1>
         <div className="hero-in [--delay:120ms]">
