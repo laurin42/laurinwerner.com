@@ -3,8 +3,8 @@ export const container = "mx-auto w-full max-w-6xl px-5 sm:px-8";
 
 /** Text link: a red underline that thickens on hover. */
 export const textLink =
-  "underline decoration-accent decoration-2 underline-offset-[0.3em] hover:decoration-4";
+  "underline decoration-accent decoration-3 underline-offset-[0.3em] hover:decoration-[5px]";
 
 /** Small link (navigation, labels): a red underline on hover only. */
 export const quietLink =
-  "decoration-accent decoration-2 underline-offset-4 hover:underline";
+  "decoration-accent decoration-3 underline-offset-4 hover:underline";

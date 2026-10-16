@@ -52,19 +52,18 @@ export function ProjectEntry({
         {/* Sized to the entry width (cqi) so the longest title, "Praxis Janis
             Werner", still spans the full width on one line. */}
         <h3 className="type-display text-[12cqi] break-words">
+          {/* A red underline marks the title as the link. It sits outside the
+              morphing title, so it stays on the page instead of flying along. */}
           <Link
             href={`/projects/${project.slug}`}
-            className="after:absolute after:inset-0"
+            className="inline-block bg-[linear-gradient(var(--accent),var(--accent))] bg-[length:100%_4px] bg-[position:0_100%] bg-no-repeat pb-[0.06em] after:absolute after:inset-0"
           >
             <ViewTransition
               name={`project-title-${project.slug}`}
               share="morph"
               default="none"
             >
-              {/* A red underline marks the title as the link. */}
-              <span className="inline-block bg-[linear-gradient(var(--accent),var(--accent))] bg-[length:100%_4px] bg-[position:0_100%] bg-no-repeat pb-[0.06em]">
-                {project.title}
-              </span>
+              <span className="inline-block">{project.title}</span>
             </ViewTransition>
           </Link>
         </h3>

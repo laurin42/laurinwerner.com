@@ -194,7 +194,7 @@ export default async function CaseStudyPage({
           <p className="type-label text-muted-foreground">{t("nextProject")}</p>
           <Link
             href={`/projects/${next.slug}`}
-            className="mt-6 inline-block type-display text-[clamp(2rem,11cqi,7.5rem)] break-words decoration-accent decoration-4 underline-offset-8 hover:underline"
+            className="mt-6 inline-block type-display text-[clamp(2rem,11cqi,7.5rem)] break-words underline decoration-accent decoration-4 underline-offset-8"
           >
             {next.title} →
           </Link>
