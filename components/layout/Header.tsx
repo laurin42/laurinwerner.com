@@ -25,40 +25,46 @@ export async function Header() {
   return (
     // Named, so it stays put while pages change (view transitions, globals.css).
     <header className="sticky top-0 z-40 bg-background [view-transition-name:site-header]">
+      {/* From lg on the same columns as the hero, so the menu spans exactly
+          the width of the portrait below it. */}
       <div
-        className={`${container} relative flex h-16 items-center justify-between gap-4`}
+        className={`${container} relative flex h-16 items-center lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-14`}
       >
-        <Link
-          href={home}
-          data-header-name
-          className="type-display text-xl whitespace-nowrap sm:text-2xl"
-        >
-          <NameWords name={siteConfig.name} />
-        </Link>
-        <div className="flex items-center gap-1">
-          <nav aria-label={t("label")} className="hidden md:block">
-            <ul className="flex items-center">
-              {items.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`px-3 py-2 type-label ${quietLink}`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <LanguageSwitcher locale={otherLocale} />
-          <ThemeToggle label={t("toggleTheme")} />
-          <MobileMenu
-            items={items}
-            navLabel={t("label")}
-            openLabel={t("openMenu")}
-            closeLabel={t("closeMenu")}
-          />
+        <div className="flex flex-1 items-center justify-between gap-4">
+          <Link
+            href={home}
+            data-header-name
+            className="type-display text-xl whitespace-nowrap sm:text-2xl"
+          >
+            <NameWords name={siteConfig.name} />
+          </Link>
+          <div className="flex items-center gap-1">
+            <LanguageSwitcher locale={otherLocale} />
+            <ThemeToggle label={t("toggleTheme")} />
+            <MobileMenu
+              items={items}
+              navLabel={t("label")}
+              openLabel={t("openMenu")}
+              closeLabel={t("closeMenu")}
+            />
+          </div>
         </div>
+        <nav aria-label={t("label")} className="hidden lg:block">
+          {/* No side padding on the links: the first and last label sit
+              exactly on the portrait's edges. */}
+          <ul className="flex items-center justify-between">
+            {items.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={`block py-2 type-label ${quietLink}`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
       <div
         aria-hidden="true"

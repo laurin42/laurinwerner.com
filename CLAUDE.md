@@ -50,6 +50,8 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
   600, small, uppercase, spaced; body = Archivo. Projects are single-column, centered, full-width
   entries without borders (image, title on one line across the entry width, text;
   narrower `max-w-3xl` from `md` on).
+  From `lg` on the header uses the hero's columns: the menu spans exactly the
+  portrait's width (below `lg` the burger menu).
   Shared container/link classes in `lib/ui.ts`. Grid tracks always `minmax(0, …)`;
   long display titles are sized in `cqi` so they never overflow.
 - Motion: `<Reveal>` (GSAP, IntersectionObserver, `gsap.matchMedia`) for content
