@@ -2,14 +2,14 @@ import type { ReactNode } from "react";
 import { Reveal } from "./Reveal";
 
 /**
- * A full-width rule that draws itself in on entry; from the middle when
- * `centered`, otherwise from the left.
+ * A full-width rule that draws itself in on entry, led by a red tip; from the
+ * middle when `centered`, otherwise from the left.
  */
 export function Rule({ centered = false }: { centered?: boolean }) {
   return (
     <Reveal
       variant="line"
-      className={`h-px bg-foreground ${centered ? "origin-center" : "origin-left"}`}
+      className={`rule h-px ${centered ? "origin-center" : "origin-left"}`}
     >
       {null}
     </Reveal>

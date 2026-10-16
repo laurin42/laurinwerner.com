@@ -4,8 +4,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Black and white only. Grey is reserved for secondary information and stays
- * at WCAG AA contrast (≥ 4.5:1) against the background in both themes.
+ * Black and white, plus one red accent. Grey is reserved for secondary
+ * information. Grey and red stay at WCAG AA contrast (≥ 4.5:1) against the
+ * background in both themes.
  */
 :root {
   --background: oklch(1 0 0);
@@ -13,6 +14,9 @@
   --muted: oklch(0.965 0 0);
   --muted-foreground: oklch(0.47 0 0);
   --border: oklch(0.9 0 0);
+  /* The one accent: signal red, sparingly (name mark, interaction, progress). */
+  --accent: oklch(0.58 0.23 28);
+  --accent-foreground: oklch(1 0 0);
   color-scheme: light;
 }
 
@@ -22,6 +26,8 @@
   --muted: oklch(0.21 0 0);
   --muted-foreground: oklch(0.72 0 0);
   --border: oklch(0.3 0 0);
+  --accent: oklch(0.66 0.2 28);
+  --accent-foreground: oklch(0.145 0 0);
   color-scheme: dark;
 }
 
@@ -31,6 +37,8 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --font-sans: var(--font-archivo);
 }
 
@@ -72,8 +80,54 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--foreground);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+}
+
+/*
+ * A rule (<Rule>): black, with a red part from `--tip` on. Only the draw-in
+ * animation sets `--tip` below 100 %, so at rest the rule is plain black.
+ */
+.rule {
+  background: linear-gradient(
+    90deg,
+    var(--foreground) var(--tip, 100%),
+    var(--accent) var(--tip, 100%)
+  );
+}
+
+/*
+ * Reading progress: a red hairline under the header that grows with the page
+ * scroll. Scroll-driven CSS runs on the compositor, so it never lags behind the
+ * scroll (unlike script). Without support, or with reduced motion, it is absent.
+ */
+[data-scroll-progress] {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-scroll-progress] {
+      display: block;
+      transform-origin: left;
+      animation: scroll-progress linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+
+@keyframes scroll-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
   }
 }
 

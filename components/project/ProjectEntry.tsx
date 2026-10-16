@@ -62,7 +62,7 @@ export function ProjectEntry({
               default="none"
             >
               {/* The underline draws in from the left on hover and focus. */}
-              <span className="inline-block bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_4px] bg-[position:0_100%] bg-no-repeat pb-[0.06em] group-hover:bg-[length:100%_4px] group-has-[:focus-visible]:bg-[length:100%_4px] motion-safe:transition-[background-size] motion-safe:duration-500 motion-safe:ease-out">
+              <span className="inline-block bg-[linear-gradient(var(--accent),var(--accent))] bg-[length:0%_4px] bg-[position:0_100%] bg-no-repeat pb-[0.06em] group-hover:bg-[length:100%_4px] group-has-[:focus-visible]:bg-[length:100%_4px] motion-safe:transition-[background-size] motion-safe:duration-500 motion-safe:ease-out">
                 {project.title}
               </span>
             </ViewTransition>

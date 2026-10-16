@@ -92,6 +92,8 @@ test.describe("motion", () => {
     await page.waitForFunction(() =>
       document
         .getAnimations()
+        // Scroll-driven ones (reading progress) never finish.
+        .filter((animation) => animation.timeline instanceof DocumentTimeline)
         .every((animation) => animation.playState === "finished"),
     );
     const resting = () =>
@@ -191,6 +193,35 @@ test.describe("motion", () => {
         "::view-transition-group(project-cover-burchartz)",
         "::view-transition-group(project-title-burchartz)",
       ]);
+  });
+
+  test("red accents: name mark, reading progress, rule tip", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/");
+    // The red full stop is decoration: the name reads without it.
+    const name = page.getByRole("heading", { level: 1 });
+    await expect(name).toHaveAccessibleName("Laurin Werner");
+    await expect(name.locator(".text-accent")).toHaveText(".");
+
+    // The progress line grows with the scroll position.
+    const progress = page.locator("[data-scroll-progress]");
+    const scale = () =>
+      progress.evaluate(
+        (el) => new DOMMatrix(getComputedStyle(el).transform).a,
+      );
+    expect(await scale()).toBeLessThan(0.01);
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await expect.poll(scale).toBeGreaterThan(0.99);
+
+    // Once drawn, a rule is plain black again: its red tip has receded.
+    const rule = page.locator("#kontakt .rule");
+    await expect
+      .poll(() =>
+        rule.evaluate((el) => getComputedStyle(el).getPropertyValue("--tip")),
+      )
+      .toBe("100%");
   });
 
   test("layout shift stays below 0.05", async ({ page }) => {

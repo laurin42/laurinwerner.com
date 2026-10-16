@@ -17,10 +17,15 @@ const variants = {
     from: { clipPath: "inset(100% 0% 0% 0%)" },
     to: { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "power4.inOut" },
   },
-  /** Draws a rule along its length; the CSS `transform-origin` sets where from. */
+  /**
+   * Draws a rule along its length, its leading tip in red (`--tip`, see `.rule`
+   * in globals.css), which then recedes. The CSS `transform-origin` sets where
+   * it draws from.
+   */
   line: {
-    from: { scaleX: 0 },
+    from: { scaleX: 0, "--tip": "88%" },
     to: { scaleX: 1, duration: 0.9, ease: "power3.inOut" },
+    then: { "--tip": "100%", duration: 0.6, ease: "power2.inOut" },
   },
   /**
    * Its content rises from below its bottom edge, which clips (see
@@ -31,7 +36,10 @@ const variants = {
     from: { yPercent: 140 },
     to: { yPercent: 0, duration: 0.8, ease: "power3.out" },
   },
-} satisfies Record<string, { from: gsap.TweenVars; to: gsap.TweenVars }>;
+} satisfies Record<
+  string,
+  { from: gsap.TweenVars; to: gsap.TweenVars; then?: gsap.TweenVars }
+>;
 
 type RevealProps = {
   children: ReactNode;
@@ -62,6 +70,8 @@ export function Reveal({
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const { from, to } = variants[variant];
+        const then =
+          "then" in variants[variant] ? variants[variant].then : null;
         const target =
           variant === "mask" ? (element.firstElementChild ?? element) : element;
         // Ready first: the CSS pre-hide (globals.css) must not apply anymore
@@ -73,7 +83,8 @@ export function Reveal({
           ([entry]) => {
             if (!entry?.isIntersecting) return;
             observer.disconnect();
-            gsap.to(target, { ...to, delay });
+            const timeline = gsap.timeline({ delay }).to(target, to);
+            if (then) timeline.to(target, then);
           },
           { rootMargin: "0px 0px -10% 0px" },
         );

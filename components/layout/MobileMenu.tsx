@@ -92,7 +92,7 @@ export function MobileMenu({
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="block py-3 type-display text-4xl hover:underline hover:decoration-2 hover:underline-offset-4"
+                  className="block py-3 type-display text-4xl decoration-accent decoration-4 underline-offset-4 hover:underline"
                 >
                   {item.label}
                 </Link>

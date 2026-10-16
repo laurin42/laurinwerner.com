@@ -2,9 +2,9 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { getProfile } from "@/content";
 import { Link } from "@/i18n/navigation";
-import { container } from "@/lib/ui";
+import { container, quietLink } from "@/lib/ui";
 
-const linkClass = "hover:underline hover:underline-offset-4";
+const linkClass = quietLink;
 
 export async function Footer() {
   const locale = await getLocale();

@@ -9,7 +9,7 @@ import { ExternalLink } from "@/components/ui/ExternalLink";
 import { getNextProject, getProject, getProjectSlugs } from "@/content";
 import { Link } from "@/i18n/navigation";
 import { sectionId } from "@/lib/sections";
-import { container, textLink } from "@/lib/ui";
+import { container, quietLink, textLink } from "@/lib/ui";
 
 // Only the known projects exist; any other slug is a real 404.
 export const dynamicParams = false;
@@ -34,7 +34,7 @@ export default async function CaseStudyPage({
     <article className={`${container} pt-10 pb-24 sm:pt-16`}>
       <Link
         href={`/#${sectionId("projects", locale)}`}
-        className="type-label hover:underline hover:underline-offset-4"
+        className={`type-label ${quietLink}`}
       >
         ← {t("allProjects")}
       </Link>
@@ -194,7 +194,7 @@ export default async function CaseStudyPage({
           <p className="type-label text-muted-foreground">{t("nextProject")}</p>
           <Link
             href={`/projects/${next.slug}`}
-            className="mt-6 inline-block type-display text-[clamp(2rem,11cqi,7.5rem)] break-words decoration-4 underline-offset-8 hover:underline"
+            className="mt-6 inline-block type-display text-[clamp(2rem,11cqi,7.5rem)] break-words decoration-accent decoration-4 underline-offset-8 hover:underline"
           >
             {next.title} →
           </Link>

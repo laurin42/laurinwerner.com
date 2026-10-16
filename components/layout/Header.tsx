@@ -5,7 +5,7 @@ import { routing } from "@/i18n/routing";
 import { sectionId, sections } from "@/lib/sections";
 import { NameWords } from "@/components/ui/NameWords";
 import { siteConfig } from "@/lib/site-config";
-import { container } from "@/lib/ui";
+import { container, quietLink } from "@/lib/ui";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MobileMenu } from "./MobileMenu";
 import { ThemeToggle } from "./ThemeToggle";
@@ -42,7 +42,7 @@ export async function Header() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="px-3 py-2 type-label hover:underline hover:underline-offset-4"
+                    className={`px-3 py-2 type-label ${quietLink}`}
                   >
                     {item.label}
                   </Link>
@@ -60,6 +60,11 @@ export async function Header() {
           />
         </div>
       </div>
+      <div
+        aria-hidden="true"
+        data-scroll-progress
+        className="absolute inset-x-0 bottom-0 h-0.5 bg-accent"
+      />
     </header>
   );
 }

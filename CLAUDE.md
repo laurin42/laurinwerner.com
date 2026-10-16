@@ -38,8 +38,13 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
 - Images: put sources in `<dir>/<slug>/` outside the repo and run
   `pnpm images <dir>`; it writes WebP to `public/images/projects/<slug>/`. Copy the
   printed width/height into the project file (a test checks they match).
-- Design (Laurin, Phase 4): layout "A" with typography "B". Black and white only,
-  OKLch tokens in `app/globals.css` (grey only for secondary text, AA contrast).
+- Design (Laurin, Phase 4): layout "A" with typography "B". Black and white plus
+  one signal red (`--accent`), OKLch tokens in `app/globals.css` (grey only for
+  secondary text; grey and red at AA contrast in both themes). Red is used only
+  for: the full stop after the name (`<NameWords>`), interaction (link
+  underlines via `textLink`/`quietLink` in `lib/ui.ts`, focus ring, selection),
+  the reading-progress line under the header (scroll-driven CSS) and the tip of
+  a rule while it draws in. Never for running text or areas.
   `type-display` = Archivo 800, 62 % width, uppercase; `type-label` = Archivo
   600, small, uppercase, spaced; body = Archivo. Projects are single-column, centered, full-width
   entries without borders (image, title on one line across the entry width, text;
