@@ -15,8 +15,9 @@ export async function Hero({ locale }: { locale: Locale }) {
   return (
     <div
       // Fills the first screen below the header, so the next section starts below
-      // the fold and the calls to action stand on their own.
-      className={`${container} grid min-h-[calc(100svh-4rem)] grid-cols-1 content-center gap-10 py-12 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-start md:gap-14`}
+      // the fold and the calls to action stand on their own. Narrow screens stack
+      // text and portrait; the portrait takes whatever height is left.
+      className={`${container} flex min-h-[calc(100svh-4rem)] flex-col gap-8 pt-8 pb-6 md:grid md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:content-center md:items-start md:gap-14 md:py-12`}
     >
       <div>
         {/* CSS-only entrance (globals.css): it starts with the first paint instead
@@ -31,22 +32,22 @@ export async function Hero({ locale }: { locale: Locale }) {
         </h1>
         <NameMorph />
         <div className="hero-in [--delay:120ms]">
-          <p className="mt-6 text-2xl font-semibold sm:text-3xl">
+          <p className="mt-5 text-2xl font-semibold sm:mt-6 sm:text-3xl">
             {profile.role}
           </p>
-          <p className="mt-4 max-w-[40ch] text-lg text-muted-foreground">
+          <p className="mt-3 max-w-[40ch] text-lg text-muted-foreground sm:mt-4">
             {profile.tagline}
           </p>
         </div>
         <div className="hero-in [--delay:240ms]">
-          <ul className="mt-8 flex flex-col gap-1 type-label text-muted-foreground sm:flex-row sm:flex-wrap sm:gap-x-6">
+          <ul className="mt-5 flex flex-col gap-1 type-label text-muted-foreground sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-x-6">
             <li>
               <span className="sr-only">{t("location")}: </span>
               {profile.location}
             </li>
             <li>{profile.availability}</li>
           </ul>
-          <p className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-lg font-semibold">
+          <p className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-lg font-semibold sm:mt-8">
             <a href={`#${sectionId("projects", locale)}`} className={textLink}>
               {t("viewProjects")}
             </a>
@@ -56,15 +57,15 @@ export async function Hero({ locale }: { locale: Locale }) {
           </p>
         </div>
       </div>
-      <div className="hero-clip max-w-sm md:max-w-none">
+      <div className="hero-clip relative min-h-48 flex-1 md:flex-none">
         <Image
           src={portrait.src}
           alt={portrait.alt}
           width={portrait.width}
           height={portrait.height}
-          sizes="(min-width: 1152px) 420px, (min-width: 768px) 38vw, 384px"
+          sizes="(min-width: 1152px) 420px, (min-width: 768px) 38vw, 100vw"
           preload
-          className="h-auto w-full grayscale"
+          className="absolute inset-0 size-full object-cover object-[50%_25%] grayscale md:static md:h-auto"
         />
       </div>
     </div>
