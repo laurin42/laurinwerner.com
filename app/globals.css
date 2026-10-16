@@ -133,29 +133,33 @@
 
 /*
  * <Reveal> (components/motion/Reveal.tsx): content is hidden only when JavaScript
- * runs (`.js`, set by an inline script before first paint) and motion is allowed.
- * Once the component mounts it marks itself `data-reveal-ready` and GSAP takes
- * over. If that never happens, the fallback animation shows the content anyway.
+ * runs (`.js`, set by an inline script before first paint) and motion is allowed,
+ * until it is `data-revealed`: GSAP then plays the entrance from the same state.
+ * Once the component mounts it marks itself `data-reveal-ready`; if that never
+ * happens, the fallback animation shows the content anyway.
  */
 @media (prefers-reduced-motion: no-preference) {
   .js [data-reveal]:not([data-reveal-ready]) {
     animation: reveal-fallback 0s 2.5s forwards;
   }
 
-  .js [data-reveal="rise"]:not([data-reveal-ready]) {
+  .js [data-reveal="rise"]:not([data-revealed]) {
     opacity: 0;
   }
 
-  .js [data-reveal="clip"]:not([data-reveal-ready]) {
+  .js [data-reveal="clip"]:not([data-revealed]) {
     clip-path: inset(100% 0 0 0);
   }
 
-  .js [data-reveal="line"]:not([data-reveal-ready]) {
+  .js [data-reveal="line"]:not([data-revealed]) {
     transform: scaleX(0);
   }
 
-  .js [data-reveal="mask"]:not([data-reveal-ready]) > * {
+  .js [data-reveal="mask"]:not([data-revealed]) > * {
     transform: translateY(140%);
+  }
+
+  .js [data-reveal="mask"]:not([data-reveal-ready]) > * {
     animation: reveal-fallback 0s 2.5s forwards;
   }
 }

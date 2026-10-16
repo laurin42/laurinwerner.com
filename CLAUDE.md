@@ -55,7 +55,7 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
   `xl` the burger menu).
   Shared container/link classes in `lib/ui.ts`. Grid tracks always `minmax(0, …)`;
   long display titles are sized in `cqi` so they never overflow.
-- Motion: `<Reveal>` (GSAP, IntersectionObserver, `gsap.matchMedia`) for content
+- Motion: `<Reveal>` (IntersectionObserver, then GSAP) for content
   below the fold. The hero uses CSS-only `hero-in`/`hero-clip` so the LCP element
   never waits for hydration. On the homepage `<NameMorph>` flies the hero name
   word by word into the header name once it slides under the header, and back
@@ -74,7 +74,9 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
   messages. Homepage section anchors are localized via `lib/sections.ts`.
 - UI strings in `messages/*.json`; content (projects, experience, profile) as typed,
   zod-validated objects in `content/`. One source of truth per text.
-- Animation: GSAP + `@gsap/react` only, as progressive enhancement. No scroll
+- Animation: GSAP only, as progressive enhancement, loaded on first use via
+  `loadGsap()` (`lib/gsap.ts`), so it stays off the critical path (Lighthouse
+  TBT); no `@gsap/react` (it would import GSAP up front). No scroll
   hijacking; content must be visible without JS and with reduced motion.
 - SEO: `generateMetadata` per page via `lib/metadata.ts` (canonical, hreflang
   with `x-default` = German, shared Open Graph fields: a page's `openGraph`

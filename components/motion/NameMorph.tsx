@@ -1,7 +1,8 @@
 "use client";
 
-import gsap from "gsap";
+import type GSAP from "gsap";
 import { useEffect } from "react";
+import { loadGsap } from "@/lib/gsap";
 
 /** Seconds for one word's flight between hero and header. */
 const DURATION = 0.7;
@@ -39,6 +40,8 @@ export function NameMorph() {
     let inHeader: boolean | undefined;
     let observer: IntersectionObserver | undefined;
     let cancelled = false;
+    // Loaded before the observer starts, so every function below has it.
+    let gsap: typeof GSAP;
 
     /** Hero words visible, or header words visible; never both. */
     function show(header: boolean) {
@@ -104,8 +107,10 @@ export function NameMorph() {
       ...hero.getAnimations().map((animation) => animation.finished),
     ])
       .catch(() => undefined)
-      .then(() => {
+      .then(loadGsap)
+      .then((loaded) => {
         if (cancelled) return;
+        gsap = loaded;
         let first = true;
         observer = new IntersectionObserver(
           ([entry]) => {
@@ -125,8 +130,9 @@ export function NameMorph() {
     return () => {
       cancelled = true;
       observer?.disconnect();
-      gsap.killTweensOf(all);
-      gsap.set(all, { clearProps: "transform,opacity" });
+      // Without GSAP nothing was animated yet.
+      gsap?.killTweensOf(all);
+      gsap?.set(all, { clearProps: "transform,opacity" });
       hero.removeAttribute("data-morphing");
       logo.style.visibility = "";
     };

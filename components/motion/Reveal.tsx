@@ -1,10 +1,8 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { type ReactNode, useRef } from "react";
-
-gsap.registerPlugin(useGSAP);
+import type gsap from "gsap";
+import { type ReactNode, useEffect, useRef } from "react";
+import { loadGsap } from "@/lib/gsap";
 
 const variants = {
   /** Fades in while rising a little; for text. */
@@ -62,41 +60,54 @@ export function Reveal({
 }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      const element = ref.current;
-      if (!element) return;
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    // The CSS fallback (globals.css) stands down: the entrance is ours now.
+    element.dataset.revealReady = "";
+    // Nothing is hidden with reduced motion, so there is nothing to play.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const { from, to } = variants[variant];
-        const then =
-          "then" in variants[variant] ? variants[variant].then : null;
-        const target =
-          variant === "mask" ? (element.firstElementChild ?? element) : element;
-        // Ready first: the CSS pre-hide (globals.css) must not apply anymore
-        // when GSAP reads the starting transform.
-        element.dataset.revealReady = "";
-        gsap.set(target, from);
+    let timeline: gsap.core.Timeline | undefined;
+    let cancelled = false;
+    const show = () => {
+      element.dataset.revealed = "";
+    };
 
-        const observer = new IntersectionObserver(
-          ([entry]) => {
-            if (!entry?.isIntersecting) return;
-            observer.disconnect();
-            const timeline = gsap.timeline({ delay }).to(target, to);
-            if (then) timeline.to(target, then);
-          },
-          { rootMargin: "0px 0px -10% 0px" },
-        );
-        observer.observe(element);
-        return () => observer.disconnect();
-      });
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        element.dataset.revealReady = "";
-      });
-    },
-    { scope: ref, dependencies: [variant, delay] },
-  );
+    // GSAP is only loaded once something scrolls into view, so it never
+    // blocks the main thread while the page starts up.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        observer.disconnect();
+        loadGsap().then((gsap) => {
+          if (cancelled) return;
+          const { from, to } = variants[variant];
+          const then =
+            "then" in variants[variant] ? variants[variant].then : null;
+          const target =
+            variant === "mask"
+              ? (element.firstElementChild ?? element)
+              : element;
+          // The CSS pre-hide goes first: GSAP would read its transform as a
+          // starting offset. `fromTo` sets the same state again before the
+          // next paint, so nothing flashes.
+          show();
+          timeline = gsap.timeline({ delay }).fromTo(target, from, to);
+          if (then) timeline.to(target, then);
+        }, show);
+      },
+      { rootMargin: "0px 0px -10% 0px" },
+    );
+    observer.observe(element);
+
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      timeline?.revert();
+      delete element.dataset.revealed;
+    };
+  }, [variant, delay]);
 
   return (
     <div ref={ref} data-reveal={variant} className={className}>
