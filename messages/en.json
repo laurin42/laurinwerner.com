@@ -52,5 +52,8 @@
     "nextProject": "Next project",
     "allProjects": "All projects",
     "ogLabel": "Project"
+  },
+  "legal": {
+    "title": "Legal notice and privacy"
   }
 }

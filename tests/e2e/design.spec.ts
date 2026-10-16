@@ -9,6 +9,8 @@ const pages = [
   "/projects/wetterstrucksi",
   "/en/projects/burnheart-mockery",
   "/gibt-es-nicht",
+  "/legal",
+  "/en/legal",
 ];
 
 /** Scrolls to the bottom in steps, so every lazy image and reveal is triggered. */

@@ -2,12 +2,18 @@ import { z } from "zod";
 import type { Locale } from "@/i18n/routing";
 import { experience as experienceData } from "./experience";
 import { type Localize, localize } from "./localize";
+import { legal as legalData } from "./legal";
 import { profile as profileData } from "./profile";
 import { burchartz } from "./projects/burchartz";
 import { burnheartMockery } from "./projects/burnheart-mockery";
 import { praxisWerner } from "./projects/praxis-werner";
 import { wetterstrucksi } from "./projects/wetterstrucksi";
-import { experienceSchema, profileSchema, projectSchema } from "./schema";
+import {
+  experienceSchema,
+  legalSchema,
+  profileSchema,
+  projectSchema,
+} from "./schema";
 
 // Validated once at module load, so invalid content fails the build.
 const projects = z
@@ -20,10 +26,12 @@ const projects = z
 
 const experience = z.array(experienceSchema).parse(experienceData);
 const profile = profileSchema.parse(profileData);
+const legal = legalSchema.parse(legalData);
 
 export type LocalizedProject = Localize<z.infer<typeof projectSchema>>;
 export type LocalizedExperience = Localize<z.infer<typeof experienceSchema>>;
 export type LocalizedProfile = Localize<z.infer<typeof profileSchema>>;
+export type LocalizedLegal = Localize<z.infer<typeof legalSchema>>;
 
 /** All projects, ordered for display. */
 export function getProjects(locale: Locale): LocalizedProject[] {
@@ -65,5 +73,9 @@ export function getProfile(locale: Locale): LocalizedProfile {
   return localize(profile, locale);
 }
 
+export function getLegal(locale: Locale): LocalizedLegal {
+  return localize(legal, locale);
+}
+
 /** Raw, unlocalized content for tests and build-time checks. */
-export const rawContent = { projects, experience, profile };
+export const rawContent = { projects, experience, profile, legal };

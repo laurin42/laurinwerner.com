@@ -92,7 +92,43 @@ export const profileSchema = z
   })
   .strict();
 
+const legalSectionSchema = z
+  .object({
+    title: localized(text),
+    paragraphs: z.array(localized(text)).min(1),
+    /** Bullet list after the paragraphs. */
+    list: z.array(localized(text)).optional(),
+    /** Paragraphs after the list. */
+    after: z.array(localized(text)).optional(),
+  })
+  .strict();
+
+/** Imprint and privacy policy (content/legal.ts). */
+export const legalSchema = z
+  .object({
+    imprint: z
+      .object({
+        title: localized(text),
+        basis: localized(text),
+        name: text,
+        address: localized(text),
+        contactLabel: localized(text),
+        responsibleLabel: localized(text),
+        responsible: localized(text),
+      })
+      .strict(),
+    privacy: z
+      .object({
+        title: localized(text),
+        updated: localized(text),
+        sections: z.array(legalSectionSchema).min(1),
+      })
+      .strict(),
+  })
+  .strict();
+
 export type Image = z.infer<typeof imageSchema>;
 export type Project = z.infer<typeof projectSchema>;
 export type Experience = z.infer<typeof experienceSchema>;
 export type Profile = z.infer<typeof profileSchema>;
+export type Legal = z.infer<typeof legalSchema>;
