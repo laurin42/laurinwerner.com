@@ -41,8 +41,9 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
 - Design (Laurin, Phase 4): layout "A" with typography "B". Black and white plus
   one signal red (`--accent`), OKLch tokens in `app/globals.css` (grey only for
   secondary text; grey and red at AA contrast in both themes). Red is used only
-  for: the full stop after the name (`<NameWords>`), interaction (link
-  underlines via `textLink`/`quietLink` in `lib/ui.ts`, focus ring, selection),
+  for: the last name ("WERNER", `<NameWords>`), interaction (link underlines
+  via `textLink`/`quietLink` in `lib/ui.ts`, the permanent project-title
+  underline, focus ring, selection),
   the reading-progress line under the header (scroll-driven CSS) and the tip of
   a rule while it draws in. Never for running text or areas.
   `type-display` = Archivo 800, 62 % width, uppercase; `type-label` = Archivo

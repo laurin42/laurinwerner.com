@@ -195,15 +195,14 @@ test.describe("motion", () => {
       ]);
   });
 
-  test("red accents: name mark, reading progress, rule tip", async ({
+  test("red accents: last name, reading progress, rule tip", async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.goto("/");
-    // The red full stop is decoration: the name reads without it.
     const name = page.getByRole("heading", { level: 1 });
     await expect(name).toHaveAccessibleName("Laurin Werner");
-    await expect(name.locator(".text-accent")).toHaveText(".");
+    await expect(name.locator(".text-accent")).toHaveText("Werner");
 
     // The progress line grows with the scroll position.
     const progress = page.locator("[data-scroll-progress]");
