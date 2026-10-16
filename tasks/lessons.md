@@ -1,9 +1,11 @@
 # Lessons
 
-- **Check what Laurin actually sees.** A long-running `pnpm dev` (Turbopack) can keep
-  serving stale CSS after `@utility` renames in `globals.css`. Before judging a
-  design report, compare the dev server's CSS with a fresh production build, and
-  ask for a dev-server restart when they differ.
+- **Check what Laurin actually sees.** Turbopack's dev server (and its disk cache
+  in `.next/dev`, which survives restarts) has twice kept serving an old
+  `globals.css` while component classes updated. A restart alone does not fix
+  it. When a design report contradicts the code, grep the dev server's CSS for
+  the change; if it is missing but the production build has it, the fix is:
+  stop `pnpm dev`, `rm -rf .next/dev`, start again.
 - **Display titles must fit their box at every width.** Size them in `cqi` against
   the longest real title and assert "one line" in a measurement, not by eye.
 - **Never position elements from the scroll position frame by frame.** The
