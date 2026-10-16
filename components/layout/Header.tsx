@@ -5,7 +5,7 @@ import { routing } from "@/i18n/routing";
 import { sectionId, sections } from "@/lib/sections";
 import { NameWords } from "@/components/ui/NameWords";
 import { siteConfig } from "@/lib/site-config";
-import { container, quietLink } from "@/lib/ui";
+import { container } from "@/lib/ui";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MobileMenu } from "./MobileMenu";
 import { ThemeToggle } from "./ThemeToggle";
@@ -25,46 +25,47 @@ export async function Header() {
   return (
     // Named, so it stays put while pages change (view transitions, globals.css).
     <header className="sticky top-0 z-40 bg-background [view-transition-name:site-header]">
-      {/* From lg on the same columns as the hero, so the menu spans exactly
-          the width of the portrait below it. */}
+      {/* From xl on the same columns as the hero: menu, language and theme
+          share one subgrid that spans exactly the portrait's width, spaced
+          evenly, the outer items on its edges. Labels are a size smaller
+          there, so all six fit with room between them. */}
       <div
-        className={`${container} relative flex h-16 items-center lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-14`}
+        className={`${container} relative flex h-16 items-center justify-between gap-4 xl:grid xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:gap-14`}
       >
-        <div className="flex flex-1 items-center justify-between gap-4">
-          <Link
-            href={home}
-            data-header-name
-            className="type-display text-xl whitespace-nowrap sm:text-2xl"
+        <Link
+          href={home}
+          data-header-name
+          className="type-display text-xl whitespace-nowrap sm:text-2xl"
+        >
+          <NameWords name={siteConfig.name} />
+        </Link>
+        <div className="flex items-center gap-1 xl:grid xl:grid-cols-[repeat(6,auto)] xl:justify-between">
+          <nav
+            aria-label={t("label")}
+            className="hidden xl:col-span-4 xl:grid xl:grid-cols-subgrid"
           >
-            <NameWords name={siteConfig.name} />
-          </Link>
-          <div className="flex items-center gap-1">
-            <LanguageSwitcher locale={otherLocale} />
-            <ThemeToggle label={t("toggleTheme")} />
-            <MobileMenu
-              items={items}
-              navLabel={t("label")}
-              openLabel={t("openMenu")}
-              closeLabel={t("closeMenu")}
-            />
-          </div>
+            <ul className="col-span-4 grid grid-cols-subgrid items-center">
+              {items.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="block py-2 type-label text-[0.6875rem] hover:text-muted-foreground"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <LanguageSwitcher locale={otherLocale} />
+          <ThemeToggle label={t("toggleTheme")} />
+          <MobileMenu
+            items={items}
+            navLabel={t("label")}
+            openLabel={t("openMenu")}
+            closeLabel={t("closeMenu")}
+          />
         </div>
-        <nav aria-label={t("label")} className="hidden lg:block">
-          {/* No side padding on the links: the first and last label sit
-              exactly on the portrait's edges. */}
-          <ul className="flex items-center justify-between">
-            {items.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`block py-2 type-label ${quietLink}`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
       </div>
       <div
         aria-hidden="true"

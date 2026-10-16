@@ -66,7 +66,7 @@ export function MobileMenu({
   const label = open ? closeLabel : openLabel;
 
   return (
-    <div className="lg:hidden">
+    <div className="xl:hidden">
       <button
         ref={buttonRef}
         type="button"

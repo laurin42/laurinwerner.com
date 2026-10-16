@@ -17,7 +17,9 @@ export function ThemeToggle({ label }: { label: string }) {
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       aria-label={label}
       title={label}
-      className="inline-flex size-10 items-center justify-center hover:bg-muted"
+      // From xl on the box hangs into the header grid's gaps, so the icon
+      // itself lines up with the portrait's right edge.
+      className="inline-flex size-10 items-center justify-center hover:bg-muted xl:-mx-2.5"
     >
       <SunIcon className="dark:hidden" />
       <MoonIcon className="hidden dark:block" />

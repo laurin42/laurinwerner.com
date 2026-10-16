@@ -146,12 +146,12 @@ test.describe("desktop navigation", () => {
       const expected = [
         "Zum Inhalt springen",
         ...(withName ? ["Laurin Werner"] : []),
-        "English",
-        "Farbschema wechseln",
         "Projekte",
         "Über mich",
         "Werdegang",
         "Kontakt",
+        "English",
+        "Farbschema wechseln",
       ];
       for (const name of expected) {
         await page.keyboard.press("Tab");
