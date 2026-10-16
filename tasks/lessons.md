@@ -27,3 +27,9 @@
   (name flight, project → case study morph). A third (scroll-spy underline in
   the navigation) was built and dropped as distracting. When an effect is
   already judged "too much", recommend no motion rather than a lighter variant.
+- **Generated image routes under `[locale]` are their own route handlers.**
+  They inherit no params from the page (list them in `generateStaticParams`),
+  Next calls `generateImageMetadata` with empty params at build time, next-intl
+  must get the locale explicitly (no root params in route handlers), and the
+  i18n proxy must not touch them (it redirected `/de/…` and rewrote `/icon/32`
+  to a 404). Fetch every generated URL once before calling it done.

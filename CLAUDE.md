@@ -76,6 +76,17 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
   zod-validated objects in `content/`. One source of truth per text.
 - Animation: GSAP + `@gsap/react` only, as progressive enhancement. No scroll
   hijacking; content must be visible without JS and with reduced motion.
+- SEO: `generateMetadata` per page via `lib/metadata.ts` (canonical, hreflang
+  with `x-default` = German, shared Open Graph fields: a page's `openGraph`
+  replaces the layout's, so spread `openGraph(locale)`). Homepage description in
+  `content/profile.ts` (150–160 characters). JSON-LD from `lib/structured-data.ts`
+  (`Person`, `CreativeWork`; `TODO(laurin)` values are left out). Share images
+  and icons are generated with `next/og` (`lib/og.tsx`) from static Archivo
+  TTFs in `assets/fonts/` (OFL; the renderer cannot read variable fonts). Image
+  routes list their own `generateStaticParams`, tolerate empty params in
+  `generateImageMetadata`, pass the locale explicitly to next-intl (no root
+  params in route handlers) and are excluded from the proxy matcher. Absolute
+  URLs come from `NEXT_PUBLIC_SITE_URL` at build time.
 - Monitoring: GlitchTip via `@sentry/nextjs`, errors only, no tracing, no PII.
 - Hosting: self-hosted Coolify (Docker), deploy via webhook from GitHub Actions.
 
