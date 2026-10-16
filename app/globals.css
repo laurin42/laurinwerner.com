@@ -103,7 +103,7 @@
 }
 
 /*
- * Reading progress: a red hairline under the header that grows with the page
+ * Reading progress: a red line under the header that grows with the page
  * scroll. Scroll-driven CSS runs on the compositor, so it never lags behind the
  * scroll (unlike script). Without support, or with reduced motion, it is absent.
  */

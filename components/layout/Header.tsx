@@ -63,7 +63,7 @@ export async function Header() {
       <div
         aria-hidden="true"
         data-scroll-progress
-        className="absolute inset-x-0 bottom-0 h-0.5 bg-accent"
+        className="absolute inset-x-0 bottom-0 h-1 bg-accent"
       />
     </header>
   );
