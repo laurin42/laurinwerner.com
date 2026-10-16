@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
@@ -6,9 +7,17 @@ import { Reveal } from "@/components/motion/Reveal";
 import { CaseStudySection } from "@/components/project/CaseStudySection";
 import { StackTags } from "@/components/project/StackTags";
 import { ExternalLink } from "@/components/ui/ExternalLink";
-import { getNextProject, getProject, getProjectSlugs } from "@/content";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  getNextProject,
+  getProfile,
+  getProject,
+  getProjectSlugs,
+} from "@/content";
 import { Link } from "@/i18n/navigation";
+import { alternates, isTodo, localizedPath, openGraph } from "@/lib/metadata";
 import { sectionId } from "@/lib/sections";
+import { creativeWorkJsonLd } from "@/lib/structured-data";
 import { container, quietLink, textLink } from "@/lib/ui";
 
 // Only the known projects exist; any other slug is a real 404.
@@ -16,6 +25,29 @@ export const dynamicParams = false;
 
 export function generateStaticParams() {
   return getProjectSlugs().map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/projects/[slug]">): Promise<Metadata> {
+  const { slug } = await params;
+  const locale = await getLocale();
+  const project = getProject(slug, locale);
+  if (!project) return {};
+  const description = isTodo(project.summary) ? undefined : project.summary;
+  const href = `/projects/${project.slug}`;
+  return {
+    title: project.title,
+    description,
+    alternates: alternates(href, locale),
+    openGraph: {
+      ...openGraph(locale),
+      type: "article",
+      title: project.title,
+      description,
+      url: localizedPath(href, locale),
+    },
+  };
 }
 
 export default async function CaseStudyPage({
@@ -32,6 +64,7 @@ export default async function CaseStudyPage({
 
   return (
     <article className={`${container} pt-10 pb-24 sm:pt-16`}>
+      <JsonLd data={creativeWorkJsonLd(project, getProfile(locale), locale)} />
       <Link
         href={`/#${sectionId("projects", locale)}`}
         className={`type-label ${quietLink}`}

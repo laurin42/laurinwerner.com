@@ -18,6 +18,10 @@ export const profile: Profile = {
     de: "Offen für eine Festanstellung in NRW oder remote",
     en: "Open to a full-time position in NRW or remote",
   },
+  description: {
+    de: "Laurin Werner ist Frontend-Entwickler in Düsseldorf und baut Websites mit React, Next.js und TypeScript. Offen für eine Festanstellung in NRW oder remote.",
+    en: "Laurin Werner is a frontend developer in Düsseldorf who builds websites with React, Next.js and TypeScript. Open to a full-time position in NRW or remote.",
+  },
   about: {
     de: "TODO(laurin): Kurzer Text über dich",
     en: "TODO(laurin): short text about yourself",

@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { routing } from "@/i18n/routing";
+import { openGraph } from "@/lib/metadata";
 import { siteConfig } from "@/lib/site-config";
 import "../globals.css";
 
@@ -32,10 +33,18 @@ const jsMarker = `(() => {
   addEventListener("popstate", navigated);
 })()`;
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: siteConfig.name,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await rootLocale();
+  if (!hasLocale(routing.locales, locale)) return {};
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: { template: `%s – ${siteConfig.name}`, default: siteConfig.name },
+    applicationName: siteConfig.name,
+    authors: [{ name: siteConfig.name, url: siteConfig.url }],
+    openGraph: { ...openGraph(locale), type: "website" },
+    twitter: { card: "summary_large_image" },
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

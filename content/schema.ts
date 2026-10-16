@@ -75,6 +75,8 @@ export const profileSchema = z
     tagline: localized(text),
     availability: localized(text),
     about: localized(text),
+    /** Meta description of the homepage, for search results and link previews. */
+    description: localized(text.min(150).max(160)),
     email: z.email(),
     links: z.object({ github: z.url(), linkedin: z.url() }).strict(),
     /** Path of the CV PDF in `public/`, once Laurin supplies it (D6). */
