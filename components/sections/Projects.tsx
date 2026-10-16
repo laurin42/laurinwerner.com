@@ -10,11 +10,7 @@ export async function Projects({ locale }: { locale: Locale }) {
   const projects = getFeaturedProjects(locale);
 
   return (
-    <Section
-      id={sectionId("projects", locale)}
-      title={t("nav.projects")}
-      centered
-    >
+    <Section id={sectionId("projects", locale)} title={t("nav.projects")}>
       <ul className="flex flex-col gap-24 sm:gap-36">
         {projects.map((project, index) => (
           <li key={project.slug}>
