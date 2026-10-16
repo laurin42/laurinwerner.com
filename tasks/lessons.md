@@ -23,3 +23,7 @@
   at `gsap.set` time becomes a permanent extra offset.
 - **Screenshot animations mid-flight, not only at rest.** Both bugs above passed
   every test until a frame-by-frame capture showed the heading never appearing.
+- **Hold the line on motion budget.** The homepage has two linked movements
+  (name flight, project → case study morph). A third (scroll-spy underline in
+  the navigation) was built and dropped as distracting. When an effect is
+  already judged "too much", recommend no motion rather than a lighter variant.
