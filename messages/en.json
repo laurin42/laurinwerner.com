@@ -50,6 +50,7 @@
     "testimonial": "Client feedback",
     "gallery": "Gallery",
     "nextProject": "Next project",
-    "allProjects": "All projects"
+    "allProjects": "All projects",
+    "ogLabel": "Project"
   }
 }

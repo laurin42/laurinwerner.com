@@ -4,9 +4,10 @@ import { getRequestConfig } from "next-intl/server";
 import { routing } from "./routing";
 
 // Reading the locale from the root param (instead of the proxy header) keeps
-// every page statically renderable.
-export default getRequestConfig(async () => {
-  const param = await rootLocale();
+// every page statically renderable. Route handlers (OG images) cannot read root
+// params yet; they pass the locale explicitly, e.g. getTranslations({ locale }).
+export default getRequestConfig(async ({ locale: explicit }) => {
+  const param = explicit ?? (await rootLocale());
   const locale = hasLocale(routing.locales, param)
     ? param
     : routing.defaultLocale;
