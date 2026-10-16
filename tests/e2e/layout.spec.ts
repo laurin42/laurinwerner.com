@@ -1,4 +1,4 @@
-import { expect, type Page, test } from "@playwright/test";
+import { type ConsoleMessage, expect, type Page, test } from "@playwright/test";
 
 /** Opens the mobile menu, retrying in case the click lands before hydration. */
 async function openMobileMenu(page: Page) {
@@ -41,6 +41,17 @@ test.describe("i18n routing", () => {
     await page.getByRole("link", { name: "Deutsch" }).click();
     await expect(page).toHaveURL("/");
 
+    for (const [de, en] of [
+      ["/projects/burchartz", "/en/projects/burchartz"],
+      ["/legal", "/en/legal"],
+    ] as const) {
+      await page.goto(de);
+      await page.getByRole("link", { name: "English" }).click();
+      await expect(page).toHaveURL(en);
+      await page.getByRole("link", { name: "Deutsch" }).click();
+      await expect(page).toHaveURL(de);
+    }
+
     // Any path is kept, including ones without a page yet.
     await page.goto("/gibt-es-nicht");
     await expect(page.getByRole("link", { name: "English" })).toHaveAttribute(
@@ -69,16 +80,21 @@ test.describe("layout", () => {
     page,
   }) => {
     const problems: string[] = [];
-    page.on("console", (message) => {
+    const onConsole = (message: ConsoleMessage) => {
       if (message.type() === "error" || /hydrat/i.test(message.text())) {
         problems.push(message.text());
       }
-    });
-    page.on("pageerror", (error) => problems.push(error.message));
+    };
+    const onPageError = (error: Error) => problems.push(error.message);
 
     for (const path of ["/", "/en"]) {
+      page.on("console", onConsole);
+      page.on("pageerror", onPageError);
       await page.goto(path);
       await page.waitForLoadState("networkidle");
+      // Leaving the page aborts its prefetches, which WebKit logs as errors.
+      page.off("console", onConsole);
+      page.off("pageerror", onPageError);
     }
     expect(problems).toEqual([]);
   });

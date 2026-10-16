@@ -185,6 +185,12 @@ test.describe("motion", () => {
     });
     await entry.locator("h3 a").click();
     await expect(page).toHaveURL("/projects/burchartz");
+    // React skips a shared element that lands outside the viewport: on short
+    // phones the case study's cover sits below the fold, so only the title morphs.
+    const coverInView = await page
+      .locator("main img")
+      .first()
+      .evaluate((img) => img.getBoundingClientRect().top < window.innerHeight);
     await expect
       .poll(() =>
         page.evaluate(() =>
@@ -192,7 +198,9 @@ test.describe("motion", () => {
         ),
       )
       .toEqual([
-        "::view-transition-group(project-cover-burchartz)",
+        ...(coverInView
+          ? ["::view-transition-group(project-cover-burchartz)"]
+          : []),
         "::view-transition-group(project-title-burchartz)",
       ]);
   });
