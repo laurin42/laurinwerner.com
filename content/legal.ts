@@ -1,8 +1,8 @@
 import type { Legal } from "./schema";
 
 // Draft by Claude for Laurin to review (Phase 6). Not legal advice. Describes
-// exactly what the site does: lib/monitoring.ts, instrumentation*.ts,
-// app/monitoring/route.ts, next-themes (localStorage), next/font (self-hosted).
+// exactly what the site does: server logs only, next-themes (localStorage),
+// next/font (self-hosted), no third-party requests (tests/e2e/legal.spec.ts).
 
 const address = {
   de: "TODO(laurin): Straße und Hausnummer, PLZ und Ort für das Impressum",
@@ -45,8 +45,8 @@ export const legal: Legal = {
         title: { de: "Das Wichtigste in Kürze", en: "Summary" },
         paragraphs: [
           {
-            de: "Diese Website setzt keine Cookies, nutzt keine Analyse- oder Tracking-Dienste und lädt keine Inhalte von Drittanbietern: Schriften und Bilder werden vom eigenen Server ausgeliefert. Verarbeitet werden nur die Daten, die für die Auslieferung der Seiten und für das Erkennen von Fehlern nötig sind.",
-            en: "This website sets no cookies, uses no analytics or tracking services and loads no content from third parties: fonts and images are served from its own server. Only the data needed to deliver the pages and to detect errors is processed.",
+            de: "Diese Website setzt keine Cookies, nutzt keine Analyse- oder Tracking-Dienste und lädt keine Inhalte von Drittanbietern: Schriften und Bilder werden vom eigenen Server ausgeliefert. Verarbeitet werden nur die Daten, die für die Auslieferung der Seiten nötig sind.",
+            en: "This website sets no cookies, uses no analytics or tracking services and loads no content from third parties: fonts and images are served from its own server. Only the data needed to deliver the pages is processed.",
           },
         ],
       },
@@ -89,52 +89,6 @@ export const legal: Legal = {
           {
             de: "TODO(laurin): Speicherdauer der Server-Logdateien",
             en: "TODO(laurin): retention period of the server log files",
-          },
-        ],
-      },
-      {
-        title: {
-          de: "Fehler-Monitoring mit GlitchTip",
-          en: "Error monitoring with GlitchTip",
-        },
-        paragraphs: [
-          {
-            de: "Tritt beim Laden oder Anzeigen einer Seite ein technischer Fehler auf, wird ein Fehlerbericht an eine selbst betriebene Instanz der Open-Source-Software GlitchTip gesendet. Ohne Fehler wird nichts gesendet.",
-            en: "If a technical error occurs while a page loads or is displayed, an error report is sent to a self-operated instance of the open-source software GlitchTip. Without an error, nothing is sent.",
-          },
-          {
-            de: "TODO(laurin): Wo die GlitchTip-Instanz läuft (Anbieter und Standort)",
-            en: "TODO(laurin): where the GlitchTip instance runs (provider and location)",
-          },
-          { de: "Ein Fehlerbericht enthält:", en: "An error report contains:" },
-        ],
-        list: [
-          {
-            de: "die Fehlermeldung und den technischen Programmablauf (Stacktrace)",
-            en: "the error message and the technical call stack (stack trace)",
-          },
-          {
-            de: "die Adresse der Seite ohne Parameter",
-            en: "the page address without parameters",
-          },
-          {
-            de: "Browser und Betriebssystem (User-Agent)",
-            en: "browser and operating system (user agent)",
-          },
-          { de: "den Zeitpunkt", en: "the time" },
-          {
-            de: "technische Angaben zu den Schritten vor dem Fehler, etwa Seitenwechsel und angeklickte Elemente (keine eingegebenen Texte)",
-            en: "technical details of the steps before the error, such as page changes and clicked elements (no entered text)",
-          },
-        ],
-        after: [
-          {
-            de: "Berichte aus dem Browser laufen über den Server dieser Website; GlitchTip erhält dabei weder Ihre IP-Adresse noch Cookies, andere Header oder eine Nutzerkennung. Zweck ist, Fehler zu erkennen und zu beheben. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; das berechtigte Interesse liegt in einer fehlerfreien Website.",
-            en: "Reports from the browser are passed on by this website's server; GlitchTip receives neither your IP address nor cookies, other headers or a user ID. The purpose is to detect and fix errors. The legal basis is Art. 6(1)(f) GDPR; the legitimate interest is a website that works without errors.",
-          },
-          {
-            de: "TODO(laurin): Speicherdauer der Fehlerberichte in GlitchTip (Standard: 90 Tage)",
-            en: "TODO(laurin): retention period of error reports in GlitchTip (default: 90 days)",
           },
         ],
       },

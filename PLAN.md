@@ -138,7 +138,7 @@ Wo er nichts sagt, gilt die Voreinstellung.
 | D2 | Standardsprache und URL-Schema? | Deutsch als Standard ohne Präfix (`/`), Englisch unter `/en` (`localePrefix: "as-needed"`) |
 | D3 | Gibt es auf der Startseite überhaupt Scroll-Effekte (Smooth Scroll, angepinnte Sektionen)? | Nein: nativer Scroll, dezente Einblendungen, keine Scroll-Übernahme |
 | D4 | Welche Animationsbibliothek? | Nur GSAP mit `@gsap/react` (`useGSAP`); Motion entfällt |
-| D5 | GlitchTip behalten? | Ja, nur für Fehler, ohne Performance-Tracing und ohne PII |
+| D5 | GlitchTip behalten? | Ja, nur für Fehler, ohne Performance-Tracing und ohne PII. **Revidiert (Laurin, 2026-10-16): kein Fehler-Monitoring**, die Seite ist vollständig statisch; Tests und Server-Logs genügen. Phase 6, Punkt 2 und die GlitchTip-Schritte in Phase 8 entfallen. |
 | D6 | Soll es eine Seite oder ein PDF mit dem Lebenslauf geben? | PDF-Download, Datei liefert Laurin |
 | D7 | Welche Projekte, in welcher Reihenfolge? Ist das GitHub-„Code Playground“-Element noch dabei? | Die vier Kundenprojekte; GitHub nur als Link im Footer bzw. in „Über mich“ |
 | D8 | Gibt es zu den Projekten öffentlichen Code, Kundenzitate oder Messwerte? | Pro Projekt `TODO(laurin)` |
@@ -397,7 +397,7 @@ LinkedIn Post Inspector).
 1. **Impressum:** Struktur aus dem alten Repo übernehmen, Name und Adresse von
    Laurin eintragen lassen (`TODO(laurin)`; nicht aus dem alten Repo kopieren,
    ohne nachzufragen).
-2. **GlitchTip** (laut D5) neu konfigurieren:
+2. ~~**GlitchTip** (laut D5) neu konfigurieren~~ – entfällt (D5 revidiert):
    - DSN nur aus der Umgebungsvariable; `sentryUrl` und Org/Projekt aus
      Umgebungsvariablen. **Keine** IP und kein `http://` im Code.
    - `sendDefaultPii: false`, `tracesSampleRate: 0`, keine Session-Replays,

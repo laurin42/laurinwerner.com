@@ -87,24 +87,17 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
   `generateImageMetadata`, pass the locale explicitly to next-intl (no root
   params in route handlers) and are excluded from the proxy matcher. Absolute
   URLs come from `NEXT_PUBLIC_SITE_URL` at build time.
-- Monitoring: GlitchTip via `@sentry/nextjs`, errors only, no tracing, no PII.
-  Config in `lib/monitoring.ts` (`dataCollection`: only the user agent),
-  `instrumentation-client.ts` (no `BrowserSession`), `instrumentation.ts`
-  (`httpIntegration({ sessions: false })`) and `app/global-error.tsx`. Browser
-  reports go through the own tunnel `app/monitoring/route.ts` (the SDK's
-  `tunnelRoute` only works for sentry.io); it forwards envelopes for our DSN
-  only and no visitor headers. `/monitoring/test` throws a test error when the
-  server runs with `MONITORING_TEST=enabled`. Without `NEXT_PUBLIC_SENTRY_DSN`
-  nothing is sent.
 - Legal: `/legal` (`#imprint`, `#privacy`) from `content/legal.ts`, `noindex`.
   The privacy policy must describe exactly what the code does: update it with
-  any change to monitoring, storage, fonts or third-party requests.
+  any change to logging, storage, fonts or third-party requests. No error
+  monitoring (D5 revised): the site is fully static; tests and server logs
+  cover it.
 - Hosting: self-hosted Coolify (Docker), deploy via webhook from GitHub Actions.
 
 ## Decisions (Laurin, 2026-10-15)
 
 D1 contact e-mail: `TODO(laurin)` · D2 DE default without prefix, EN `/en` ·
-D3 native scroll, subtle reveals · D4 GSAP only · D5 GlitchTip errors-only ·
+D3 native scroll, subtle reveals · D4 GSAP only · D5 GlitchTip errors-only (revised 2026-10-16: no error monitoring) ·
 D6 CV as PDF download (Laurin supplies the file) · D7 the four client projects,
 GitHub only as a link · D8 code/quotes/metrics per project `TODO(laurin)`.
 

@@ -30,3 +30,10 @@ Plan (PLAN.md §5, Phase 6):
 - No third-party requests (tested). Sentry costs ~36 kB gzip of client JS
   (184 → 221 kB on `/`).
 - Checks: lint, typecheck, 53 unit tests, build, 97 E2E tests, audit green.
+
+## Revised (Laurin, 2026-10-16)
+
+GlitchTip/Sentry removed again (D5 revised): the site is fully static, so the
+36 kB of client JS, the tunnel and the extra privacy-policy section were not
+worth it. Monitoring commit reverted; privacy policy, proxy matcher, docs and
+tests updated. Error coverage: E2E tests before every deploy, server logs.

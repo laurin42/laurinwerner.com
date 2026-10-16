@@ -67,8 +67,4 @@ test.describe("privacy in practice", () => {
     expect(await storage()).toEqual({ local: ["theme"], session: [] });
     expect(await context.cookies()).toEqual([]);
   });
-
-  test("the monitoring test route is off by default", async ({ request }) => {
-    expect((await request.get("/monitoring/test")).status()).toBe(404);
-  });
 });
