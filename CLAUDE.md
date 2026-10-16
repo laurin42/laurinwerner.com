@@ -42,7 +42,8 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
   OKLch tokens in `app/globals.css` (grey only for secondary text, AA contrast).
   `type-display` = Archivo 800, 62 % width, uppercase; `type-label` = Archivo
   600, small, uppercase, spaced; body = Archivo. Projects are single-column, centered, full-width
-  entries without borders (image, title on one line across the full width, text).
+  entries without borders (image, title on one line across the entry width, text;
+  narrower `max-w-3xl` from `md` on).
   Shared container/link classes in `lib/ui.ts`. Grid tracks always `minmax(0, …)`;
   long display titles are sized in `cqi` so they never overflow.
 - Motion: `<Reveal>` (GSAP, IntersectionObserver, `gsap.matchMedia`) for content

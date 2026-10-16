@@ -12,8 +12,8 @@ type ProjectEntryProps = {
 };
 
 /**
- * One project in a single, centered column across the full content width:
- * image, title, text. The whole entry is clickable via a stretched title link, so the link
+ * One project in a single, centered column: image, title, text. Full width on
+ * small screens, a narrower measure from `md` on. The whole entry is clickable via a stretched title link, so the link
  * text stays the project title.
  */
 export function ProjectEntry({
@@ -24,14 +24,14 @@ export function ProjectEntry({
   const { cover } = project.images;
 
   return (
-    <article className="group @container relative">
+    <article className="group @container relative md:mx-auto md:max-w-3xl">
       <Reveal variant="clip">
         <Image
           src={cover.src}
           alt={cover.alt}
           width={cover.width}
           height={cover.height}
-          sizes="(min-width: 1152px) 1088px, 100vw"
+          sizes="(min-width: 768px) 768px, 100vw"
           loading={eager ? "eager" : "lazy"}
           className="h-auto w-full"
         />
