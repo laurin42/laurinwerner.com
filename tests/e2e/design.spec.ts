@@ -66,10 +66,17 @@ test.describe("motion", () => {
   }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.goto("/");
-    const contact = page.locator("#kontakt [data-reveal]").first();
+    const contact = page.locator('#kontakt [data-reveal="rise"]').first();
     await expect(contact).toHaveCSS("opacity", "0");
     await contact.scrollIntoViewIfNeeded();
     await expect(contact).toHaveCSS("opacity", "1");
+
+    // The section heading rises out of its mask into place.
+    const heading = page.locator("#kontakt-heading");
+    await expect
+      .poll(() => heading.evaluate((el) => getComputedStyle(el).transform))
+      .toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
+    await expect(heading).toBeInViewport();
   });
 
   test("hero name flies into the header name and back", async ({ page }) => {
@@ -121,6 +128,71 @@ test.describe("motion", () => {
     expect(await page.evaluate(() => document.getAnimations().length)).toBe(0);
   });
 
+  test("the project in focus is in colour, the others grey", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const entries = page.locator("#projekte article");
+    await entries.nth(1).scrollIntoViewIfNeeded();
+    await page.evaluate(() => {
+      const cover = document.querySelectorAll("#projekte article img")[1]!;
+      const { top, height } = cover.getBoundingClientRect();
+      window.scrollBy(0, top + height / 2 - window.innerHeight / 2);
+    });
+    await expect(entries.nth(1).locator("img")).toHaveCSS("filter", "none");
+    await expect(entries.nth(3).locator("img")).toHaveCSS(
+      "filter",
+      "grayscale(1)",
+    );
+  });
+
+  test("a project's cover and title morph into its case study", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/");
+    const entry = page.locator("#projekte article").nth(1);
+    await entry.scrollIntoViewIfNeeded();
+    // Let the link prefetch the case study, so it renders in the same commit.
+    await page.waitForLoadState("networkidle");
+    await page.evaluate(() => {
+      const start = Document.prototype.startViewTransition;
+      (window as unknown as { morphs: string[] }).morphs = [];
+      document.startViewTransition = function (
+        this: Document,
+        ...args: Parameters<Document["startViewTransition"]>
+      ) {
+        const transition = start.apply(this, args);
+        void transition.ready.then(() => {
+          (window as unknown as { morphs: string[] }).morphs.push(
+            ...document
+              .getAnimations()
+              .map(
+                (animation) =>
+                  (animation.effect as KeyframeEffect).pseudoElement,
+              )
+              .filter(
+                (name): name is string => !!name?.includes("-group(project"),
+              ),
+          );
+        });
+        return transition;
+      };
+    });
+    await entry.locator("h3 a").click();
+    await expect(page).toHaveURL("/projects/burchartz");
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          (window as unknown as { morphs: string[] }).morphs.toSorted(),
+        ),
+      )
+      .toEqual([
+        "::view-transition-group(project-cover-burchartz)",
+        "::view-transition-group(project-title-burchartz)",
+      ]);
+  });
+
   test("layout shift stays below 0.05", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     for (const path of ["/", "/projects/burchartz"]) {
@@ -154,6 +226,12 @@ test.describe("without JavaScript", () => {
   test("the header name is always visible", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("[data-header-name]")).toBeVisible();
+  });
+
+  test("project covers are in colour", async ({ page }) => {
+    await page.goto("/");
+    for (const cover of await page.locator("#projekte img").all())
+      await expect(cover).toHaveCSS("filter", "none");
   });
 });
 

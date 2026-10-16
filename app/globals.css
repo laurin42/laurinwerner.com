@@ -107,14 +107,17 @@
 }
 
 /*
-/* Hero entrance: pure CSS, runs from the first paint, never depends on JavaScript. */
+ * Hero entrance: pure CSS, runs from the first paint, never depends on
+ * JavaScript. Only on a full page load: after an in-site navigation
+ * (`data-navigated`, see the layout) the view transition is the entrance.
+ */
 @media (prefers-reduced-motion: no-preference) {
-  .hero-in {
+  :root:not([data-navigated]) .hero-in {
     animation: hero-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--delay, 0s)
       both;
   }
 
-  .hero-clip {
+  :root:not([data-navigated]) .hero-clip {
     animation: hero-uncover 1.2s cubic-bezier(0.7, 0, 0.2, 1) 0.15s both;
   }
 }
@@ -136,6 +139,70 @@
 
 body:has(header [aria-expanded="true"]) #hero-name {
   z-index: auto;
+}
+
+/*
+ * Project covers (<Colorize>): greyscale, in colour while in focus or hovered.
+ * Grey only when JavaScript runs, so without it the work is always in colour.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-colorize] img {
+    transition:
+      filter 0.8s ease-out,
+      scale 0.6s ease-out;
+  }
+}
+
+.js [data-colorize]:not([data-in-view]) img {
+  filter: grayscale(1);
+}
+
+@media (hover: hover) {
+  .group:hover [data-colorize] img {
+    filter: none;
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .group:hover [data-colorize] img {
+    scale: 1.02;
+  }
+}
+
+/*
+ * View transitions (React <ViewTransition>): project cover and title morph
+ * between the list and the case study; the rest of the page crossfades, the
+ * header stays put. Clicks pass through to the live page meanwhile.
+ */
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-group(.morph) {
+  animation-duration: 500ms;
+  animation-timing-function: cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+
+::view-transition-old(site-header) {
+  display: none;
+}
+
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
 }
 
 @keyframes hero-rise {

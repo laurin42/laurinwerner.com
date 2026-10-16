@@ -7,6 +7,7 @@ const ALLOWED = [
   "components/layout/LanguageSwitcher.tsx",
   "components/layout/MobileMenu.tsx",
   "components/layout/ThemeToggle.tsx",
+  "components/motion/Colorize.tsx",
   "components/motion/NameMorph.tsx",
   "components/motion/Reveal.tsx",
 ];

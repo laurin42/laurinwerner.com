@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { ViewTransition } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Reveal } from "@/components/motion/Reveal";
 import { CaseStudySection } from "@/components/project/CaseStudySection";
@@ -41,7 +42,14 @@ export default async function CaseStudyPage({
       <header className="@container mt-10 grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-end md:gap-14">
         <div className="hero-in">
           <h1 className="type-display text-[clamp(2rem,12.5cqi,9rem)] break-words md:text-[clamp(2rem,7cqi,9rem)]">
-            {project.title}
+            {/* Morphs from the project entry on the homepage (same name). */}
+            <ViewTransition
+              name={`project-title-${project.slug}`}
+              share="morph"
+              default="none"
+            >
+              <span className="inline-block">{project.title}</span>
+            </ViewTransition>
           </h1>
           {project.tagline && (
             <p className="mt-6 text-2xl font-semibold sm:text-3xl">
@@ -90,15 +98,23 @@ export default async function CaseStudyPage({
       </header>
 
       <div className="hero-clip mt-16">
-        <Image
-          src={cover.src}
-          alt={cover.alt}
-          width={cover.width}
-          height={cover.height}
-          sizes="(min-width: 1152px) 1088px, 100vw"
-          preload
-          className="h-auto w-full"
-        />
+        <ViewTransition
+          name={`project-cover-${project.slug}`}
+          share="morph"
+          default="none"
+        >
+          <div>
+            <Image
+              src={cover.src}
+              alt={cover.alt}
+              width={cover.width}
+              height={cover.height}
+              sizes="(min-width: 1152px) 1088px, 100vw"
+              preload
+              className="h-auto w-full"
+            />
+          </div>
+        </ViewTransition>
       </div>
 
       <div className="mt-20 flex flex-col gap-16 sm:mt-28 sm:gap-24">

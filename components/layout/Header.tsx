@@ -23,7 +23,8 @@ export async function Header() {
   }));
 
   return (
-    <header className="sticky top-0 z-40 bg-background">
+    // Named, so it stays put while pages change (view transitions, globals.css).
+    <header className="sticky top-0 z-40 bg-background [view-transition-name:site-header]">
       <div
         className={`${container} relative flex h-16 items-center justify-between gap-4`}
       >

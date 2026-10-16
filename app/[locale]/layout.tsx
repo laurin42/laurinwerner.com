@@ -19,7 +19,18 @@ const archivo = Archivo({
 
 // Marks that JavaScript runs, before first paint, so <Reveal> may hide content
 // it is about to animate in. Without JavaScript nothing is ever hidden.
-const jsMarker = `document.documentElement.classList.add("js")`;
+// After the first in-site navigation it also marks `data-navigated`: page
+// entrances (.hero-in, .hero-clip) only play on a full load, because after a
+// click the view transition is the entrance.
+const jsMarker = `(() => {
+  const root = document.documentElement;
+  root.classList.add("js");
+  const navigated = () => root.setAttribute("data-navigated", "");
+  addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest('a[href^="/"]')) navigated();
+  }, true);
+  addEventListener("popstate", navigated);
+})()`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),

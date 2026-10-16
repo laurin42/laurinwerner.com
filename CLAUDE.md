@@ -53,7 +53,13 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
   (IntersectionObserver + time-based GSAP FLIP). Never position elements from
   the scroll position frame by frame: it jitters, because the browser scrolls
   on another thread. With reduced motion the swap is instant, without JS the
-  header name is always visible. Content is only hidden under `.js` (inline script in the layout) and without
+  header name is always visible. Section headings: `<Rule>` draws in, then
+  `<MaskedHeading>` rises (Reveal `line`/`mask`). Project covers are grey and
+  take on colour while in focus or hovered (`<Colorize>`, CSS). Cover and title
+  morph into the case study via React `<ViewTransition>` (shared names
+  `project-cover-<slug>`/`project-title-<slug>`); morph participants get no
+  entrance of their own, and `.hero-in`/`.hero-clip` only play on a full load
+  (`data-navigated`, set by the inline script in the layout). Content is only hidden under `.js` (inline script in the layout) and without
   reduced motion; a CSS fallback reveals it after 2.5 s.
 - Client components get their strings as props; `NextIntlClientProvider` ships no
   messages. Homepage section anchors are localized via `lib/sections.ts`.
