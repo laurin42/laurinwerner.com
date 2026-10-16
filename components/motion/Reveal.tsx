@@ -17,6 +17,20 @@ const variants = {
     from: { clipPath: "inset(100% 0% 0% 0%)" },
     to: { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "power4.inOut" },
   },
+  /** Draws a rule along its length; the CSS `transform-origin` sets where from. */
+  line: {
+    from: { scaleX: 0 },
+    to: { scaleX: 1, duration: 0.9, ease: "power3.inOut" },
+  },
+  /**
+   * Its content rises from below its bottom edge, which clips (see
+   * <MaskedHeading>). The box itself stays put, so it can be observed.
+   */
+  mask: {
+    // More than 100 %: accents (Ü) reach above the tight display line box.
+    from: { yPercent: 140 },
+    to: { yPercent: 0, duration: 0.8, ease: "power3.out" },
+  },
 } satisfies Record<string, { from: gsap.TweenVars; to: gsap.TweenVars }>;
 
 type RevealProps = {
@@ -48,14 +62,18 @@ export function Reveal({
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const { from, to } = variants[variant];
-        gsap.set(element, from);
+        const target =
+          variant === "mask" ? (element.firstElementChild ?? element) : element;
+        // Ready first: the CSS pre-hide (globals.css) must not apply anymore
+        // when GSAP reads the starting transform.
         element.dataset.revealReady = "";
+        gsap.set(target, from);
 
         const observer = new IntersectionObserver(
           ([entry]) => {
             if (!entry?.isIntersecting) return;
             observer.disconnect();
-            gsap.to(element, { ...to, delay });
+            gsap.to(target, { ...to, delay });
           },
           { rootMargin: "0px 0px -10% 0px" },
         );

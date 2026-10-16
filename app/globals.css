@@ -95,8 +95,18 @@
   .js [data-reveal="clip"]:not([data-reveal-ready]) {
     clip-path: inset(100% 0 0 0);
   }
+
+  .js [data-reveal="line"]:not([data-reveal-ready]) {
+    transform: scaleX(0);
+  }
+
+  .js [data-reveal="mask"]:not([data-reveal-ready]) > * {
+    transform: translateY(140%);
+    animation: reveal-fallback 0s 2.5s forwards;
+  }
 }
 
+/*
 /* Hero entrance: pure CSS, runs from the first paint, never depends on JavaScript. */
 @media (prefers-reduced-motion: no-preference) {
   .hero-in {
@@ -148,5 +158,6 @@ body:has(header [aria-expanded="true"]) #hero-name {
   to {
     opacity: 1;
     clip-path: inset(0 0 0 0);
+    transform: none;
   }
 }

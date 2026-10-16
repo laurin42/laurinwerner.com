@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Reveal } from "@/components/motion/Reveal";
+import { MaskedHeading, Rule } from "@/components/motion/HeadingReveal";
 import { container } from "@/lib/ui";
 
 type SectionProps = {
@@ -24,15 +24,12 @@ export function Section({
       aria-labelledby={headingId}
       className={`${container} py-20 sm:py-28`}
     >
-      <Reveal>
-        <div
-          className={`flex border-t border-foreground pt-4 ${centered ? "justify-center text-center" : ""}`}
-        >
-          <h2 id={headingId} className="type-display text-5xl sm:text-6xl">
-            {title}
-          </h2>
-        </div>
-      </Reveal>
+      <Rule centered={centered} />
+      <MaskedHeading className={`pt-4 ${centered ? "text-center" : ""}`}>
+        <h2 id={headingId} className="type-display text-5xl sm:text-6xl">
+          {title}
+        </h2>
+      </MaskedHeading>
       <div className="mt-12 sm:mt-16">{children}</div>
     </section>
   );

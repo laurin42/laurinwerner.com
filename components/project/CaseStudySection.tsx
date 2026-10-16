@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Reveal } from "@/components/motion/Reveal";
+import { MaskedHeading, Rule } from "@/components/motion/HeadingReveal";
 
 type CaseStudySectionProps = {
   id: string;
@@ -14,13 +15,16 @@ export function CaseStudySection({
   children,
 }: CaseStudySectionProps) {
   return (
-    <section aria-labelledby={id} className="border-t border-foreground pt-4">
-      <Reveal className="grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
-        <h2 id={id} className="type-display text-4xl">
-          {title}
-        </h2>
-        <div className="max-w-[60ch] text-lg">{children}</div>
-      </Reveal>
+    <section aria-labelledby={id}>
+      <Rule />
+      <div className="grid grid-cols-1 gap-6 pt-4 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12">
+        <MaskedHeading>
+          <h2 id={id} className="type-display text-4xl">
+            {title}
+          </h2>
+        </MaskedHeading>
+        <Reveal className="max-w-[60ch] text-lg">{children}</Reveal>
+      </div>
     </section>
   );
 }
