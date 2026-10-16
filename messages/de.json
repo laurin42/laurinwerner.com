@@ -33,8 +33,7 @@
     "cvMissing": "TODO(laurin): Lebenslauf als PDF",
     "present": "heute",
     "contactEmail": "E-Mail",
-    "techStack": "Technologien",
-    "projectCount": "{count, plural, one {# Projekt} other {# Projekte}}"
+    "techStack": "Technologien"
   },
   "caseStudy": {
     "facts": "Eckdaten",
