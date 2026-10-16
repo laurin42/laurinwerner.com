@@ -88,6 +88,17 @@ Node version: see `.nvmrc`. pnpm version: pinned via `packageManager`.
   params in route handlers) and are excluded from the proxy matcher. Absolute
   URLs come from `NEXT_PUBLIC_SITE_URL` at build time.
 - Monitoring: GlitchTip via `@sentry/nextjs`, errors only, no tracing, no PII.
+  Config in `lib/monitoring.ts` (`dataCollection`: only the user agent),
+  `instrumentation-client.ts` (no `BrowserSession`), `instrumentation.ts`
+  (`httpIntegration({ sessions: false })`) and `app/global-error.tsx`. Browser
+  reports go through the own tunnel `app/monitoring/route.ts` (the SDK's
+  `tunnelRoute` only works for sentry.io); it forwards envelopes for our DSN
+  only and no visitor headers. `/monitoring/test` throws a test error when the
+  server runs with `MONITORING_TEST=enabled`. Without `NEXT_PUBLIC_SENTRY_DSN`
+  nothing is sent.
+- Legal: `/legal` (`#imprint`, `#privacy`) from `content/legal.ts`, `noindex`.
+  The privacy policy must describe exactly what the code does: update it with
+  any change to monitoring, storage, fonts or third-party requests.
 - Hosting: self-hosted Coolify (Docker), deploy via webhook from GitHub Actions.
 
 ## Decisions (Laurin, 2026-10-15)
