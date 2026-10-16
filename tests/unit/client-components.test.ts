@@ -4,7 +4,6 @@ import { describe, expect, it } from "vitest";
 
 // Server Components by default: only these files may opt into client rendering.
 const ALLOWED = [
-  "app/global-error.tsx",
   "components/layout/LanguageSwitcher.tsx",
   "components/layout/MobileMenu.tsx",
   "components/layout/ThemeToggle.tsx",
