@@ -20,7 +20,9 @@
   reveal that observes it never fires. Observe the clipping box instead.
 - **Drop CSS pre-hide styles before GSAP reads them.** GSAP parses the current
   computed transform as its starting point; a CSS `translateY(100%)` still active
-  at `gsap.set` time becomes a permanent extra offset.
+  at `gsap.set` time becomes a permanent extra offset. This holds for `fromTo`
+  too, even though its `from` looks explicit (repeated in Phase 7): lift the
+  pre-hide first, then tween, in the same synchronous block.
 - **Screenshot animations mid-flight, not only at rest.** Both bugs above passed
   every test until a frame-by-frame capture showed the heading never appearing.
 - **Hold the line on motion budget.** The homepage has two linked movements
@@ -33,3 +35,12 @@
   must get the locale explicitly (no root params in route handlers), and the
   i18n proxy must not touch them (it redirected `/de/…` and rewrote `/icon/32`
   to a 404). Fetch every generated URL once before calling it done.
+- **`next build` can serve stale CSS too.** After a CSS-only change, the
+  production build kept the old stylesheet (same hash) from
+  `.next/cache/turbopack`. After editing CSS, grep the served stylesheet for
+  the change before measuring or testing; if it is missing, delete
+  `.next/cache/turbopack`, `.next/static` and `.next/server` (not `.next/dev`,
+  which belongs to the running dev server) and build again.
+- **Lighthouse CI asserts on the best run by default** (`optimistic`). A budget
+  that passes that way can fail on most runs. Assert on the median of five, and
+  look at the per-run spread before calling a page fast enough.

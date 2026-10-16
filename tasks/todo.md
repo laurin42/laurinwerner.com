@@ -1,39 +1,41 @@
-# Phase 6 – Legal and monitoring
+# Phase 7 – Quality assurance
 
-Plan (PLAN.md §5, Phase 6):
+Plan (PLAN.md §5, Phase 7):
 
-- [x] GlitchTip via `@sentry/nextjs` (D5): DSN, URL, org and project only from
-      env vars; no PII, no tracing, no session envelopes, no replays, no logs.
-- [x] Own tunnel at `/monitoring` (the SDK's `tunnelRoute` only rewrites to
-      sentry.io): forwards envelopes for the configured DSN only, no client IP.
-- [x] Server errors via `instrumentation.ts` (`onRequestError`), render errors
-      via `app/global-error.tsx`.
-- [x] Opt-in test route for Laurin to throw a deliberate error.
-- [x] Legal page `/legal` (`#imprint`, `#privacy`), DE + EN: imprint structure
-      from the old repo, address as `TODO(laurin)`; privacy policy describing
-      what actually happens (server logs, GlitchTip, no cookies, localStorage
-      for the theme, self-hosted fonts, e-mail, rights).
-- [x] Tests: no third-party requests, tunnel rejects foreign DSNs, legal page.
-- [x] Checks green, commits, summary to Laurin (not legal advice).
+- [x] Playwright: add WebKit (desktop Safari, iPhone) next to Chromium
+      (desktop, Pixel 7); fix whatever fails there.
+- [x] Fill coverage gaps against the list in PLAN.md: sections in both
+      languages, language switch keeps the path, case studies + next project +
+      404, mobile menu (keyboard, Escape), theme switch, no JS and reduced
+      motion, legal links per locale.
+- [x] Accessibility: axe on every page in both themes (exists; check it runs
+      in every project).
+- [x] Lighthouse CI (`@lhci/cli`): config with budgets (mobile performance
+      ≥ 95; accessibility, best practices, SEO = 100) against the production
+      build; run locally.
+- [x] CI workflow (GitHub Actions): checks, build, E2E, Lighthouse, so
+      "green in CI" can be verified. Deploy follows in Phase 8.
+- [x] Bundle: first-load JS of the homepage in the README.
+- [x] Checks green, commits, summary to Laurin.
 
 ## Review
 
-- GlitchTip: DSN, URL, org, project and auth token only from env vars. Only
-  the user agent is collected (no IP, cookies, other headers, query strings,
-  bodies or local variables); no tracing, sessions, replays or logs. Verified
-  against a fake GlitchTip: nothing on page load; browser and server errors
-  arrive; the only extra item is a "crashed" server session sent with an error.
-- Own tunnel `/monitoring`: forwards only our DSN (400 otherwise), max 256 kB,
-  no visitor headers (spoofed X-Forwarded-For does not arrive).
-- `/legal`: imprint (§ 5 DDG, address TODO) and privacy policy draft in DE/EN,
-  `noindex`. No cookies; localStorage `theme` only after toggling (tested).
-- No third-party requests (tested). Sentry costs ~36 kB gzip of client JS
-  (184 → 221 kB on `/`).
-- Checks: lint, typecheck, 53 unit tests, build, 97 E2E tests, audit green.
-
-## Revised (Laurin, 2026-10-16)
-
-GlitchTip/Sentry removed again (D5 revised): the site is fully static, so the
-36 kB of client JS, the tunnel and the extra privacy-policy section were not
-worth it. Monitoring commit reverted; privacy policy, proxy matcher, docs and
-tests updated. Error coverage: E2E tests before every deploy, server logs.
+- WebKit (desktop Safari, iPhone 15) added next to Chromium (desktop, Pixel 7).
+  Two test-only fixes: on short phones the case-study cover lands below the
+  fold, and React skips shared transitions outside the viewport, so only the
+  title morphs there (now asserted per viewport). WebKit logs aborted
+  prefetches as errors when the test itself navigates away, so the
+  console-error test listens per page.
+- Coverage gap closed: the language switch is now clicked on a case study and
+  on the legal page too.
+- Lighthouse was at 0.89–0.97 on mobile; the case studies failed on TBT, which
+  came from GSAP: loaded up front, with a forced style recalculation for every
+  `<Reveal>` at startup. Now `loadGsap()` (`lib/gsap.ts`) loads it on first use;
+  `<Reveal>` waits for its element to intersect (native observer), and the CSS
+  pre-hide holds the start state until then. `@gsap/react` removed. Medians
+  now 0.97–0.98; accessibility, best practices and SEO 100.
+- Canonical audit failed locally only because the build's site URL differed
+  from the test server's origin: CI builds with `http://localhost:3100`.
+- JS on `/`: 157 kB with the page, plus 27 kB of GSAP after the hero entrance.
+- CI workflow `.github/workflows/ci.yml`: checks + audit, then build, E2E (4
+  projects) and Lighthouse. Deploy follows in Phase 8.
